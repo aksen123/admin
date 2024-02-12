@@ -1,7 +1,7 @@
 import Calendar from "../Components/Calendar";
 import { RiMoneyDollarCircleFill } from "react-icons/ri";
 
-const page = () => {
+const SalesPage = () => {
   return (
     <article className="w-[90%] flex flex-col gap-10 py-10">
       <h2 className="text-2xl font-bold">3월 24일 매출 현황</h2>
@@ -33,4 +33,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default SalesPage;

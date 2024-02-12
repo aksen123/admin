@@ -1,12 +1,14 @@
 "use client";
+
 import { FaPlus } from "react-icons/fa";
 import useSWR from "swr";
 import { foodsService } from "../service/foods";
 
-const page = () => {
+import React from "react";
+
+export default function ManagementPage() {
   const { data } = useSWR("/api/menu", () => foodsService.get());
 
-  console.log(data);
   return (
     <article className="w-full h-[calc(100vh-3rem)] max-h-fit p-10 bg-white flex flex-col">
       <h2 className="text-2xl font-bold">메뉴 관리</h2>
@@ -31,32 +33,42 @@ const page = () => {
           </tr>
         </thead>
         <tbody>
-          {data &&
-            data.map((food, i) => (
-              <tr key={i}>
-                <td className="border-2 border-l-0 border-gray-300 p-2">
-                  {food.name}
-                </td>
-                <td className="border-2 border-gray-300 p-2">
-                  {food.price.toLocaleString()}원
-                </td>
-                <td className="border-2 border-gray-300 p-2">X</td>
-                <td className="border-2 border-gray-300 p-2 text-center">
-                  <button className="text-gray-500 rounded-xl p-2 bg-gray-200 font-semibold ">
-                    수정
-                  </button>
-                </td>
-                <td className="border-2 border-r-0 border-gray-300 p-2 text-center">
-                  <button className="text-red-500 rounded-xl p-2 bg-red-200 font-semibold ">
-                    삭제
-                  </button>
-                </td>
-              </tr>
-            ))}
+          {data?.map((food, i) => (
+            <tr key={i}>
+              <td className="border-2 border-l-0 border-gray-300 p-2">
+                {food.name}
+              </td>
+              <td className="border-2 border-gray-300 p-2">
+                {food.price.toLocaleString()}원
+              </td>
+              <td className="border-2 border-gray-300">
+                <span
+                  className={`
+                    ml-2 p-2 text-xs font-medium me-2 px-2.5 py-0.5 rounded
+                    ${
+                      food.soldOut
+                        ? "bg-red-100 text-red-800"
+                        : "bg-blue-100 text-blue-800"
+                    }
+                 `}
+                >
+                  {food.soldOut ? "품절" : "판매가능"}
+                </span>
+              </td>
+              <td className="border-2 border-gray-300 p-2 text-center">
+                <button className="text-gray-500 rounded-xl p-2 bg-gray-200 font-semibold ">
+                  수정
+                </button>
+              </td>
+              <td className="border-2 border-r-0 border-gray-300 p-2 text-center">
+                <button className="text-red-500 rounded-xl p-2 bg-red-200 font-semibold ">
+                  삭제
+                </button>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </article>
   );
-};
-
-export default page;
+}

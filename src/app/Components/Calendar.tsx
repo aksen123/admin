@@ -70,6 +70,7 @@ const Calendar = () => {
             </div>
             {salesCalendar(date.year, date.month).map((el, i) => (
               <div
+                key={i}
                 className={`border-b-2 border-b-gray-100 py-3 ${
                   i < 7 && +el > 20 ? "opacity-40 " : null
                 } ${i > 20 && +el < 10 ? "opacity-40 " : null}`}
