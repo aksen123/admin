@@ -4,8 +4,6 @@ import { FaPlus } from "react-icons/fa";
 import useSWR from "swr";
 import { foodsService } from "../service/foods";
 
-import React from "react";
-
 export default function ManagementPage() {
   const { data } = useSWR("/api/menu", () => foodsService.get());
 
