@@ -1,6 +1,12 @@
 "use client";
 import { FaPlus } from "react-icons/fa";
+import useSWR from "swr";
+import { foodsService } from "../service/foods";
+
 const page = () => {
+  const { data } = useSWR("/api/menu", () => foodsService.get());
+
+  console.log(data);
   return (
     <article className="w-full h-[calc(100vh-3rem)] max-h-fit p-10 bg-white flex flex-col">
       <h2 className="text-2xl font-bold">메뉴 관리</h2>
@@ -25,23 +31,28 @@ const page = () => {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td className="border-2 border-l-0 border-gray-300 p-2">
-              고기만두
-            </td>
-            <td className="border-2 border-gray-300 p-2">4,500원</td>
-            <td className="border-2 border-gray-300 p-2">X</td>
-            <td className="border-2 border-gray-300 p-2 text-center">
-              <button className="text-gray-500 rounded-xl p-2 bg-gray-200 font-semibold ">
-                수정
-              </button>
-            </td>
-            <td className="border-2 border-r-0 border-gray-300 p-2 text-center">
-              <button className="text-red-500 rounded-xl p-2 bg-red-200 font-semibold ">
-                삭제
-              </button>
-            </td>
-          </tr>
+          {data &&
+            data.map((food, i) => (
+              <tr key={i}>
+                <td className="border-2 border-l-0 border-gray-300 p-2">
+                  {food.name}
+                </td>
+                <td className="border-2 border-gray-300 p-2">
+                  {food.price.toLocaleString()}원
+                </td>
+                <td className="border-2 border-gray-300 p-2">X</td>
+                <td className="border-2 border-gray-300 p-2 text-center">
+                  <button className="text-gray-500 rounded-xl p-2 bg-gray-200 font-semibold ">
+                    수정
+                  </button>
+                </td>
+                <td className="border-2 border-r-0 border-gray-300 p-2 text-center">
+                  <button className="text-red-500 rounded-xl p-2 bg-red-200 font-semibold ">
+                    삭제
+                  </button>
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
     </article>

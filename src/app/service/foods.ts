@@ -1,7 +1,7 @@
 import api from "./axios";
-
+import { Food } from "@/types/service";
 export const foodsService = {
-  get() {
+  get(): Promise<Food[]> {
     return api.get("/api/menu");
   },
 };
