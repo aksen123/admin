@@ -1,9 +1,10 @@
 "use client";
+
 import { FaPlus } from "react-icons/fa";
 import useSWR from "swr";
 import { foodsService } from "../service/foods";
 
-const page = () => {
+export default function ManagementPage() {
   const { data } = useSWR("/api/menu", () => foodsService.get());
 
   console.log(data);
@@ -57,6 +58,4 @@ const page = () => {
       </table>
     </article>
   );
-};
-
-export default page;
+}
