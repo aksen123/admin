@@ -1,19 +1,26 @@
 "use client";
 
 import { FaPlus } from "react-icons/fa";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import { foodsService } from "../service/foods";
+import AddFoodPopup from "../Components/modal/popup/AddFoodPopup";
+import { useState } from "react";
+import Image from "next/image";
 
 export default function ManagementPage() {
-  const { data } = useSWR("/api/menu", () => foodsService.get());
+  const { data: foods = [] } = useSWR("/api/menu", () => foodsService.get());
+  const [isAddFoodPopup, setIsAddFoodPopup] = useState<boolean>(false);
 
   return (
-    <article className="w-full h-[calc(100vh-3rem)] max-h-fit p-10 bg-white flex flex-col">
+    <article className="w-full min-h-[calc(100vh-3rem)] max-h-fit p-10 bg-white flex flex-col">
       <h2 className="text-2xl font-bold">메뉴 관리</h2>
       <div className="w-full mt-8 mb-2 flex justify-end">
-        <button className="p-2 rounded-lg bg-blue-600 text-white flex items-center">
+        <button
+          className="p-2 rounded-lg bg-blue-600 text-white flex items-center"
+          onClick={() => setIsAddFoodPopup(true)}
+        >
           <FaPlus className="inline-block mr-1" />
-          메뉴 추가하기
+          메뉴 추가
         </button>
       </div>
       <table className="border-y-2 border-y-gray-100">
@@ -31,10 +38,17 @@ export default function ManagementPage() {
           </tr>
         </thead>
         <tbody>
-          {data?.map((food, i) => (
+          {foods.map((food, i) => (
             <tr key={i}>
               <td className="border-2 border-l-0 border-gray-300 p-2">
-                {food.name}
+                <Image
+                  src={food.src}
+                  width={50}
+                  height={50}
+                  alt="메뉴이미지"
+                  className="inline-block mr-5"
+                />
+                <span>{food.name}</span>
               </td>
               <td className="border-2 border-gray-300 p-2">
                 {food.price.toLocaleString()}원
@@ -59,7 +73,22 @@ export default function ManagementPage() {
                 </button>
               </td>
               <td className="border-2 border-r-0 border-gray-300 p-2 text-center">
-                <button className="text-red-500 rounded-xl p-2 bg-red-200 font-semibold ">
+                <button
+                  onClick={() =>
+                    window.yesNo(
+                      food.name,
+                      "정말로 삭제 하시겠습니까?",
+                      "삭제",
+                      async () => {
+                        await foodsService.delete(food.id).then(() => {
+                          alert(`${food.name} 메뉴가 삭제되었습니다.`);
+                          mutate("/api/menu");
+                        });
+                      }
+                    )
+                  }
+                  className="text-red-500 rounded-xl p-2 bg-red-200 font-semibold "
+                >
                   삭제
                 </button>
               </td>
@@ -67,6 +96,10 @@ export default function ManagementPage() {
           ))}
         </tbody>
       </table>
+
+      {isAddFoodPopup && (
+        <AddFoodPopup onClose={() => setIsAddFoodPopup(false)} />
+      )}
     </article>
   );
 }

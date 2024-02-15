@@ -42,9 +42,10 @@ const onError = (error: CustomAxiosError) => {
     alert("접근 권한이 없습니다.");
     return;
   }
-
-  alert(error.response?.data?.error?.message || JSON.stringify(error.response));
-  return Promise.reject(error.response?.data?.error?.message || error.response);
+  alert(error.response?.data?.error?.message || error.response.statusText);
+  return Promise.reject(
+    error.response?.data?.error?.message || error.response.statusText
+  );
 };
 
 api.interceptors.request.use(onRequest, onError);
