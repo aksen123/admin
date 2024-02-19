@@ -7,6 +7,8 @@ import { mutate } from "swr";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { firebaseApp } from "@/app/service/firebase";
 import Image from "next/image";
+import axios from "axios";
+import { url } from "inspector";
 
 export default function AddFoodPopup({ onClose }: { onClose: () => void }) {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
@@ -23,12 +25,23 @@ export default function AddFoodPopup({ onClose }: { onClose: () => void }) {
   });
 
   const onSubmit = async (food: Food) => {
-    if (image !== null) {
-      food.src = image as string;
-      await foodsService.add(food);
-      alert(`${food.name} 음식이 등록되었습니다.`);
-      mutate("/api/menu");
-      onClose();
+    const formData = new FormData();
+    formData.append("file", food.file ? food.file[0] : "");
+    formData.append("name", food.name);
+    formData.append("price", food.price + "");
+
+    if (imageUrl !== null) {
+      foodsService
+        .add(formData)
+        .then(() => {
+          alert(`${food.name} 음식이 등록되었습니다.`);
+          URL.revokeObjectURL(imageUrl);
+          mutate("/api/menu");
+          onClose();
+        })
+        .catch((err) => {
+          console.log("err>>>>>>>>>>>>>>>>>", err);
+        });
     }
   };
 
@@ -45,20 +58,8 @@ export default function AddFoodPopup({ onClose }: { onClose: () => void }) {
         setImageUrl(null);
         e.target.value = "";
       } else {
-        const reader = new FileReader();
-        reader.onload = () => {
-          const result = reader.result;
-          if (typeof result === "string") {
-            setImageUrl(result);
-            const storageRef = ref(firebaseApp, `menu/${selectedImage?.name}`);
-            uploadBytes(storageRef, selectedImage as File).then((snapshot) => {
-              getDownloadURL(snapshot.ref).then((url) => {
-                setImage(url);
-              });
-            });
-          }
-        };
-        reader.readAsDataURL(selectedImage);
+        const url = URL.createObjectURL(selectedImage);
+        setImageUrl(url);
       }
     } else {
       setImageUrl(null);
@@ -116,7 +117,7 @@ export default function AddFoodPopup({ onClose }: { onClose: () => void }) {
               <Image width={100} height={100} src={imageUrl} alt="메뉴이미지" />
             )}
             <input
-              {...register("src", {
+              {...register("file", {
                 onChange(e: React.ChangeEvent<HTMLInputElement>) {
                   handleChange(e);
                 },
