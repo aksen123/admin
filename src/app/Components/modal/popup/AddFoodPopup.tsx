@@ -7,12 +7,16 @@ import { mutate } from "swr";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { firebaseApp } from "@/app/service/firebase";
 import Image from "next/image";
-import axios from "axios";
-import { url } from "inspector";
 
-export default function AddFoodPopup({ onClose }: { onClose: () => void }) {
+interface PopupType {
+  food: Food | null;
+  onClose: () => void;
+}
+
+export default function AddFoodPopup({ food, onClose }: PopupType) {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [image, setImage] = useState<string | null>(null);
+  const [foodSrc, setFoodSrc] = useState<string | null>(null);
+  const [sale, setSale] = useState<boolean>(false);
   const {
     register,
     setFocus,
@@ -24,29 +28,47 @@ export default function AddFoodPopup({ onClose }: { onClose: () => void }) {
     defaultValues: {},
   });
 
-  const onSubmit = async (food: Food) => {
+  const onSubmit = async (formFood: Food) => {
     const formData = new FormData();
-    formData.append("file", food.file ? food.file[0] : "");
-    formData.append("name", food.name);
-    formData.append("price", food.price + "");
-
-    if (imageUrl !== null) {
-      foodsService
-        .add(formData)
-        .then(() => {
-          alert(`${food.name} 음식이 등록되었습니다.`);
-          URL.revokeObjectURL(imageUrl);
-          mutate("/api/menu");
-          onClose();
-        })
-        .catch((err) => {
-          console.log("err>>>>>>>>>>>>>>>>>", err);
-        });
+    for (const [key, value] of Object.entries(formFood)) {
+      key == "file"
+        ? formData.append(key, value[0])
+        : formData.append(key, value);
     }
+    foodSrc && formData.append("src", foodSrc);
+    food && formData.append("origin", food.name);
+
+    food
+      ? await foodsService.update(formData)
+      : await foodsService.add(formData);
+    alert(`${formFood.name} 음식이 등록되었습니다.`);
+    mutate("/api/menu");
+    onClose();
+    imageUrl && URL.revokeObjectURL(imageUrl);
+  };
+
+  const add = async (data: Food) => {};
+
+  const update = async (data: Food) => {
+    const formData = new FormData();
+    for (const [key, value] of Object.entries(data)) {
+      key == "file"
+        ? formData.append(key, value[0])
+        : formData.append(key, value);
+    }
+
+    await foodsService.update(formData);
+    alert("메뉴수정 완료");
+    mutate("/api/menu");
   };
 
   useEffect(() => {
     setFocus("name");
+    if (food) {
+      setSale(food.soldOut == "true");
+      setImageUrl(food.src ? food.src : null);
+      setFoodSrc(food.src ? food.src : null);
+    }
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -86,6 +108,7 @@ export default function AddFoodPopup({ onClose }: { onClose: () => void }) {
                   setValue("name", String(e.target.value).replaceAll(" ", ""));
                 },
               })}
+              defaultValue={food ? food.name : ""}
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
               placeholder="이름입력"
             />
@@ -105,6 +128,7 @@ export default function AddFoodPopup({ onClose }: { onClose: () => void }) {
                   );
                 },
               })}
+              defaultValue={food ? food.price : ""}
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
               placeholder="가격입력"
             />
@@ -127,6 +151,32 @@ export default function AddFoodPopup({ onClose }: { onClose: () => void }) {
               accept="image/*"
             />
           </div>
+          <div className="mb-5">
+            <label
+              className="block mb-2 text-sm font-medium text-gray-900"
+              htmlFor="soldOut"
+            >
+              품절 유무
+            </label>
+            <input
+              {...register("soldOut")}
+              type="checkbox"
+              checked={sale}
+              onClick={() => setSale(!sale)}
+            />
+            <span
+              className={`
+                    ml-2 p-2 text-xs font-medium me-2 px-2.5 py-0.5 rounded
+                    ${
+                      sale
+                        ? "bg-red-100 text-red-800"
+                        : "bg-blue-100 text-blue-800"
+                    } 
+                 `}
+            >
+              {sale ? "품절" : "판매가능"}
+            </span>
+          </div>
         </div>
         <div className="flex gap-2">
           <button
@@ -140,7 +190,7 @@ export default function AddFoodPopup({ onClose }: { onClose: () => void }) {
             type="submit"
             className="grow p-2 rounded-2xl text-white bg-blue-500"
           >
-            추가
+            {food ? "수정" : "추가"}
           </button>
         </div>
       </form>

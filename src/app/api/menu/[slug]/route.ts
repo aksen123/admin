@@ -13,10 +13,13 @@ export async function DELETE(request: NextRequest, context: Params) {
   const food = await getDoc(doc(db, "foods", context.params.slug));
 
   if (!food) {
-    return Response.json({
-      success: false,
-      error: { message: "조회되지 않는 아이디입니다." },
-    });
+    return Response.json(
+      {
+        success: false,
+        error: { message: "조회되지 않는 아이디입니다." },
+      },
+      { status: 500 }
+    );
   }
 
   await deleteDoc(doc(db, "foods", context.params.slug));

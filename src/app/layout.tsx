@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="w-screen overflow-x-hidden overflow-y-auto">
+      <body className="relative w-screen overflow-x-hidden overflow-y-auto">
         <header className="h-12 flex items-center justify-between px-10 border-b-2 border-b-gray-100">
           <div className="flex items-center gap-1 text-2xl font-bold text-blue-700">
             <GiDumplingBao size={30} />

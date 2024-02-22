@@ -8,10 +8,8 @@ export const foodsService = {
   add(formData: FormData) {
     return apiFile.post("/api/menu", formData);
   },
-  update(food: Food) {
-    return api.post("/api/menu", {
-      ...food,
-    });
+  update(formData: FormData) {
+    return apiFile.put("/api/menu", formData);
   },
   delete(id: string) {
     return api.delete(`/api/menu/${id}`);

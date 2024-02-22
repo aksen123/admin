@@ -6,11 +6,16 @@ import { foodsService } from "../service/foods";
 import AddFoodPopup from "../Components/modal/popup/AddFoodPopup";
 import { useState } from "react";
 import Image from "next/image";
+import { Food } from "@/types/service";
 
 export default function ManagementPage() {
   const { data: foods = [] } = useSWR("/api/menu", () => foodsService.get());
   const [isAddFoodPopup, setIsAddFoodPopup] = useState<boolean>(false);
-
+  const [foodData, setFoodData] = useState<Food | null>(null);
+  const editMenu = (food: Food) => {
+    setFoodData(food);
+    setIsAddFoodPopup(true);
+  };
   return (
     <article className="w-full min-h-[calc(100vh-3rem)] max-h-fit p-10 bg-white flex flex-col">
       <h2 className="text-2xl font-bold">메뉴 관리</h2>
@@ -42,7 +47,11 @@ export default function ManagementPage() {
             <tr key={i}>
               <td className="border-2 border-l-0 border-gray-300 p-2">
                 <Image
-                  src={food.src}
+                  src={
+                    food.src
+                      ? food.src
+                      : "http://placehold.it/50/808080/ffffff&text=menu"
+                  }
                   width={50}
                   height={50}
                   alt="메뉴이미지"
@@ -68,7 +77,12 @@ export default function ManagementPage() {
                 </span>
               </td>
               <td className="border-2 border-gray-300 p-2 text-center">
-                <button className="text-gray-500 rounded-xl p-2 bg-gray-200 font-semibold ">
+                <button
+                  className="text-gray-500 rounded-xl p-2 bg-gray-200 font-semibold "
+                  onClick={() => {
+                    editMenu(food);
+                  }}
+                >
                   수정
                 </button>
               </td>
@@ -98,7 +112,13 @@ export default function ManagementPage() {
       </table>
 
       {isAddFoodPopup && (
-        <AddFoodPopup onClose={() => setIsAddFoodPopup(false)} />
+        <AddFoodPopup
+          food={foodData}
+          onClose={() => {
+            setIsAddFoodPopup(false);
+            setFoodData(null);
+          }}
+        />
       )}
     </article>
   );

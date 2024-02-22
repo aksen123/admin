@@ -18,7 +18,7 @@ const Modal = ({ open, onClose, children }: ModalProps) => {
       <>
         <div
           onClick={onClose}
-          className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-[rgba(0,0,0,0.5)]"
+          className="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-[rgba(0,0,0,0.5)]"
         >
           {children}
         </div>
