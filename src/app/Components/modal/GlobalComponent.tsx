@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 import Alert from "@/app/Components/modal/Alert";
 import Confirm from "@/app/Components/modal/Confirm";
-import Warning from "@/app/Components/modal/Warning";
 import { CheckType, modalState } from "@/app/atoms/modal-atom";
 import { useRecoilState } from "recoil";
+import Modal from "./Modal";
 
 const GlobalComponent = () => {
   const [modal, setModal] = useRecoilState(modalState);
@@ -50,9 +50,14 @@ const GlobalComponent = () => {
         setOpen(true);
       }, 100);
     };
+
+    const root = document.createElement("div");
+    root.setAttribute("id", "modal");
+    document.body.appendChild(root);
   }, []);
+
   return (
-    <Warning open={open}>
+    <Modal open={open}>
       {modal.type === CheckType.alert && (
         <Alert message={modal.title} callback={modal.handleEvent} />
       )}
@@ -65,7 +70,7 @@ const GlobalComponent = () => {
           cb2={() => setOpen(false)}
         />
       )}
-    </Warning>
+    </Modal>
   );
 };
 

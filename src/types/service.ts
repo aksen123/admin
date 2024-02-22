@@ -5,5 +5,6 @@ export interface Food {
   src: string;
   number: number;
   count: number;
-  soldOut: boolean;
+  soldOut: boolean | string;
+  file?: File | any;
 }
