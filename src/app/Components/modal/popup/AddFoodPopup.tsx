@@ -11,9 +11,10 @@ import Image from "next/image";
 interface PopupType {
   food: Food | null;
   onClose: () => void;
+  sort?: number;
 }
 
-export default function AddFoodPopup({ food, onClose }: PopupType) {
+export default function AddFoodPopup({ food, onClose, sort }: PopupType) {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [foodSrc, setFoodSrc] = useState<string | null>(null);
   const [sale, setSale] = useState<boolean>(false);
@@ -35,9 +36,9 @@ export default function AddFoodPopup({ food, onClose }: PopupType) {
         ? formData.append(key, value[0])
         : formData.append(key, value);
     }
+    formData.append("sort", food ? food.sort + "" : sort + "");
     foodSrc && formData.append("src", foodSrc);
     food && formData.append("origin", food.name);
-
     food
       ? await foodsService.update(formData)
       : await foodsService.add(formData);
@@ -45,21 +46,6 @@ export default function AddFoodPopup({ food, onClose }: PopupType) {
     mutate("/api/menu");
     onClose();
     imageUrl && URL.revokeObjectURL(imageUrl);
-  };
-
-  const add = async (data: Food) => {};
-
-  const update = async (data: Food) => {
-    const formData = new FormData();
-    for (const [key, value] of Object.entries(data)) {
-      key == "file"
-        ? formData.append(key, value[0])
-        : formData.append(key, value);
-    }
-
-    await foodsService.update(formData);
-    alert("메뉴수정 완료");
-    mutate("/api/menu");
   };
 
   useEffect(() => {

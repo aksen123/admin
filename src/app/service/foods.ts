@@ -1,4 +1,3 @@
-import axios from "axios";
 import api, { apiFile } from "./axios";
 import { Food } from "@/types/service";
 export const foodsService = {
@@ -13,5 +12,8 @@ export const foodsService = {
   },
   delete(id: string) {
     return api.delete(`/api/menu/${id}`);
+  },
+  sort(obj: any) {
+    return apiFile.post("/api/sort", obj);
   },
 };

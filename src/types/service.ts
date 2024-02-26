@@ -3,7 +3,7 @@ export interface Food {
   name: string;
   price: number;
   src: string;
-  number: number;
+  sort: number;
   count: number;
   soldOut: boolean | string;
   file?: File | any;
