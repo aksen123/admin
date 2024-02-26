@@ -4,18 +4,29 @@ import { FaPlus } from "react-icons/fa";
 import useSWR, { mutate } from "swr";
 import { foodsService } from "../service/foods";
 import AddFoodPopup from "../Components/modal/popup/AddFoodPopup";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Food } from "@/types/service";
+import { ReactSortable, SortableEvent } from "react-sortablejs";
 
 export default function ManagementPage() {
-  const { data: foods = [] } = useSWR("/api/menu", () => foodsService.get());
+  const { data: foods = [], isLoading } = useSWR("/api/menu", () =>
+    foodsService.get()
+  );
   const [isAddFoodPopup, setIsAddFoodPopup] = useState<boolean>(false);
   const [foodData, setFoodData] = useState<Food | null>(null);
+  const [test, setTest] = useState<Food[]>([]);
+  const [sortNumber, setSortNumber] = useState(0);
   const editMenu = (food: Food) => {
     setFoodData(food);
     setIsAddFoodPopup(true);
   };
+
+  useEffect(() => {
+    foods.length > 0 ? setTest(foods) : false;
+    const maxNumber = Math.max(...foods.map((obj) => +obj.sort));
+    setSortNumber(maxNumber < 0 ? 0 : maxNumber + 1);
+  }, [foods]);
   return (
     <article className="w-full min-h-[calc(100vh-3rem)] max-h-fit p-10 bg-white flex flex-col">
       <h2 className="text-2xl font-bold">메뉴 관리</h2>
@@ -42,9 +53,21 @@ export default function ManagementPage() {
             </th>
           </tr>
         </thead>
-        <tbody>
-          {foods.map((food, i) => (
-            <tr key={i}>
+        <ReactSortable
+          tag={"tbody"}
+          animation={200}
+          list={test}
+          setList={() => {}}
+          onEnd={(e: SortableEvent) => {
+            const list = [...test];
+            const obj = list.splice(e.oldIndex as number, 1);
+            list.splice(e.newIndex as number, 0, ...obj);
+            setTest(list);
+            foodsService.sort(list);
+          }}
+        >
+          {test.map((food, i) => (
+            <tr key={food.name + i}>
               <td className="border-2 border-l-0 border-gray-300 p-2">
                 <Image
                   src={
@@ -108,12 +131,13 @@ export default function ManagementPage() {
               </td>
             </tr>
           ))}
-        </tbody>
+        </ReactSortable>
       </table>
 
       {isAddFoodPopup && (
         <AddFoodPopup
           food={foodData}
+          sort={sortNumber}
           onClose={() => {
             setIsAddFoodPopup(false);
             setFoodData(null);
