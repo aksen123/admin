@@ -1,21 +1,20 @@
 "use client";
 
-import Link from "next/link";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import { DateState, calendarState, MonthTotal } from "../atoms/calendar-atom";
+import { Sales } from "@/types/service";
+import dayjs from "dayjs";
+import { useEffect, useState } from "react";
 import {
   BiSolidChevronLeftSquare,
   BiSolidChevronRightSquare,
 } from "react-icons/bi";
-import dayjs from "dayjs";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { DateState, MonthTotal, calendarState } from "../atoms/calendar-atom";
 import { saleService } from "../service/sales";
-import { Sales } from "@/types/service";
-import { useEffect, useState } from "react";
 
 interface CalendarType {
   day: number;
   data: Sales[];
-  total: number;
+  total?: number;
 }
 const Calendar = () => {
   const [date, setDate] = useRecoilState(calendarState);
@@ -54,7 +53,7 @@ const Calendar = () => {
     } else {
       setDateState({
         date: data.day,
-        dateTotal: data.total,
+        dateTotal: data.total || 0,
         count: data.data.length,
       });
     }
@@ -76,7 +75,7 @@ const Calendar = () => {
 
     const getSales = async () => {
       const data = await saleService.get(range);
-      const arr = [];
+      const arr: CalendarType[] = [];
 
       for (let i = monthFirst; i > 0; i--) {
         const sales = data.filter((el) => {
@@ -90,7 +89,7 @@ const Calendar = () => {
         arr.push({
           day: current.startOf("month").subtract(i, "day").date(),
           data: sales,
-          total: totalPrice,
+          // total: totalPrice,
         });
       }
 
@@ -145,7 +144,7 @@ const Calendar = () => {
           arr.push({
             day: i,
             data: sales,
-            total: totalPrice,
+            // total: totalPrice,
           });
         }
       }
@@ -153,74 +152,85 @@ const Calendar = () => {
     };
     getSales();
   }, [date]);
-  return (
-    <div className="w-full p-5 bg-white shadow-2xl rounded-xl">
-      <div className="w-full flex flex-col">
-        <div
-          className="flex items-center justify-between text-xl mb-10 
-        "
-        >
-          <h2 className="font-semibold">{`${date.year}년 ${month}월`}</h2>
-          <div className="flex">
-            <BiSolidChevronLeftSquare
-              size={40}
-              color="gray"
-              onClick={() => {
-                changeMonth(-1);
-                setPickDate(1);
-              }}
-            />
-            <BiSolidChevronRightSquare
-              size={40}
-              color="gray"
-              onClick={() => {
-                changeMonth(1);
-                setPickDate(1);
-              }}
-            />
-          </div>
-        </div>
-        <div className="flex justify-center gap-3 px-5 grow">
-          <div className="w-full grid grid-cols-7">
-            <div className="col-span-7 grid grid-cols-7 font-bold mb-8">
-              <span className="text-red-600">일</span>
-              <span>월</span>
-              <span>화</span>
-              <span>수</span>
-              <span>목</span>
-              <span>금</span>
-              <span className="text-blue-600">토</span>
-            </div>
-            {calendarArr.map((el, i) => {
-              return (
-                <div
-                  key={i}
-                  className={`border-b-2 border-b-gray-100 py-3  ${
-                    (i < 7 && +el.day > 20) || (i > 20 && +el.day < 10)
-                      ? "opacity-40 cursor-text"
-                      : "cursor-pointer"
-                  } `}
-                  onClick={() => {
-                    clickDate(i, +el.day, el);
-                  }}
-                >
-                  <p
-                    className={`mb-3 text-lg ${
-                      i % 7 == 0 ? "text-red-600" : null
-                    } ${i % 7 === 6 ? "text-blue-600" : null}`}
-                  >
-                    {el.day}
-                  </p>
 
-                  <span className="text-sm text-green-500">
-                    {el.total.toLocaleString()}원
-                  </span>
-                </div>
-              );
-            })}
+  return (
+    <div className="flex space-x-4">
+      <div className="w-full p-5 bg-white shadow-2xl rounded-xl">
+        <div className="w-full flex flex-col">
+          <div className="flex items-center justify-end text-xl mb-10">
+            <div className="flex">
+              <BiSolidChevronLeftSquare
+                size={40}
+                color="gray"
+                onClick={() => {
+                  changeMonth(-1);
+                  setPickDate(1);
+                }}
+              />
+              <BiSolidChevronRightSquare
+                size={40}
+                color="gray"
+                onClick={() => {
+                  changeMonth(1);
+                  setPickDate(1);
+                }}
+              />
+            </div>
+          </div>
+          <div className="flex justify-center gap-3 px-5 grow">
+            <div className="w-full grid grid-cols-7">
+              <div className="col-span-7 grid grid-cols-7 font-bold mb-8">
+                <span className="text-red-600">일</span>
+                <span>월</span>
+                <span>화</span>
+                <span>수</span>
+                <span>목</span>
+                <span>금</span>
+                <span className="text-blue-600">토</span>
+              </div>
+              {calendarArr.map((el, i) => {
+                return (
+                  <div
+                    key={i}
+                    className={`border-b-2 border-b-gray-100 py-3  ${
+                      (i < 7 && +el.day > 20) || (i > 20 && +el.day < 10)
+                        ? "opacity-40 cursor-text"
+                        : "cursor-pointer"
+                    } `}
+                    onClick={() => {
+                      clickDate(i, +el.day, el);
+                    }}
+                  >
+                    <p
+                      className={`mb-3 text-lg ${
+                        i % 7 == 0 ? "text-red-600" : null
+                      } ${i % 7 === 6 ? "text-blue-600" : null}`}
+                    >
+                      {el.day}
+                    </p>
+
+                    <span
+                      className={`
+                      text-sm
+                      ${
+                        typeof el.total === "number" && el.total === 0
+                          ? "text-gray-300"
+                          : "text-blue-500"
+                      }
+                    `}
+                    >
+                      {typeof el.total === "number"
+                        ? `${el.total?.toLocaleString()}원`
+                        : ""}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>
+      <div className="w-2/4 p-5 bg-white shadow-2xl rounded-xl">tests</div>
     </div>
   );
 };

@@ -21,11 +21,12 @@ const api = axios.create({
     "Content-Type": `application/json`,
   },
 });
+
 export const apiFile = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
-  // headers: {
-  //   "Content-Type": "multipart/form-data",
-  // },
+  headers: {
+    "Content-Type": "multipart/form-data",
+  },
 });
 
 const onRequest = async (config: InternalAxiosRequestConfig) => {
