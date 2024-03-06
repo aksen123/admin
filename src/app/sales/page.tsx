@@ -1,10 +1,10 @@
 "use client";
 
-import { RiMoneyDollarCircleFill } from "react-icons/ri";
 import { MdCalendarMonth } from "react-icons/md";
-import Calendar from "../Components/Calendar";
-import { calendarState, DateState, MonthTotal } from "../atoms/calendar-atom";
+import { RiMoneyDollarCircleFill } from "react-icons/ri";
 import { useRecoilValue } from "recoil";
+import { calendarState, DateState, MonthTotal } from "../atoms/calendar-atom";
+import Calendar from "../Components/Calendar";
 
 export default function SalesPage() {
   const date = useRecoilValue(calendarState);
@@ -18,16 +18,14 @@ export default function SalesPage() {
       <div className="py-5 pl-4 bg-white shadow-xl rounded-xl grid grid-cols-3">
         <div className="flex items-center justify-between px-4">
           <div>
-            <span className="text-gray-400 text-sm">이번 달 매출금액</span>
+            <span className="text-gray-400 text-sm">총 매출 금액</span>
             <p className="font-semibold text-xl">{amount.toLocaleString()}원</p>
           </div>
           <MdCalendarMonth size={30} color="blue" />
         </div>
         <div className="flex items-center justify-between px-4 relative before:absolute before:w-[1px] before:h-full before:bg-black before:left-0 first:px-0 first:pr-4 ">
           <div>
-            <span className="text-gray-400 text-sm">
-              {dateState.date}일 매출금액
-            </span>
+            <span className="text-gray-400 text-sm">총 매출 건수</span>
             <p className="font-semibold text-xl">
               {dateState.dateTotal.toLocaleString()}원
             </p>
@@ -36,9 +34,7 @@ export default function SalesPage() {
         </div>
         <div className="flex items-center justify-between px-4 relative before:absolute before:w-[1px] before:h-full before:bg-black before:left-0 first:px-0 first:pr-4">
           <div>
-            <span className="text-gray-400 text-sm">
-              {dateState.date}일 매출건수
-            </span>
+            <span className="text-gray-400 text-sm">총 주문 건수</span>
             <p className="font-semibold text-xl">{dateState.count}건</p>
           </div>
           <RiMoneyDollarCircleFill size={30} color="blue" />
