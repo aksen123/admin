@@ -1,4 +1,5 @@
 "use client";
+import { useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 
 interface ModalProps {
@@ -8,12 +9,15 @@ interface ModalProps {
 }
 
 const Modal = ({ open, onClose, children }: ModalProps) => {
-  const root = document.querySelector("#modal");
-
+  const ref = useRef<HTMLDivElement | null>(null);
   if (!open) return null;
 
+  useEffect(() => {
+    ref.current = document.querySelector("#modal");
+  }, []);
+
   return (
-    root &&
+    ref.current &&
     ReactDOM.createPortal(
       <>
         <div
@@ -23,7 +27,7 @@ const Modal = ({ open, onClose, children }: ModalProps) => {
           {children}
         </div>
       </>,
-      root as HTMLElement
+      ref.current
     )
   );
 };
