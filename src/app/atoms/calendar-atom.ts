@@ -18,5 +18,5 @@ export const DateState = atom({
 });
 export const MonthTotal = atom({
   key: "month total",
-  default: 0,
+  default: { total: 0, salesCount: 0, orderCount: 0 },
 });

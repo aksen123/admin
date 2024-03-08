@@ -1,3 +1,5 @@
+import Calendar from "@/app/Components/Calendar";
+
 export interface Food {
   id: string;
   name: string;
@@ -11,14 +13,32 @@ export interface Food {
 
 interface Orders {
   date: number;
-  order: {
-    name: string;
-    price: number;
-    count: number;
-  }[];
+  order:
+    | string
+    | {
+        name: string;
+        price: number;
+        count: number;
+      }[];
 }
 export interface Sales {
   date: number;
   orders: Orders[];
   totalPrice: number;
+}
+
+export interface Calendars {
+  date: number;
+  total: number | null;
+  format: string;
+}
+export interface GetPayment {
+  totalPrice: number;
+  totalSalesCount: number;
+  calendars: Calendars[];
+}
+
+export interface Range {
+  start: number;
+  end: number;
 }

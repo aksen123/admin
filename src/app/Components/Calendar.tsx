@@ -1,6 +1,6 @@
 "use client";
 
-import { Sales } from "@/types/service";
+import { Calendars, Range, Sales } from "@/types/service";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import {
@@ -11,27 +11,17 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { DateState, MonthTotal, calendarState } from "../atoms/calendar-atom";
 import { saleService } from "../service/sales";
 
-interface CalendarType {
-  day: number;
-  data: Sales[];
-  total?: number;
-}
 const Calendar = () => {
   const [date, setDate] = useRecoilState(calendarState);
   const setDateState = useSetRecoilState(DateState);
   const setMonthTotal = useSetRecoilState(MonthTotal);
-  const [calendarArr, setCalendarArr] = useState<CalendarType[]>([]);
-  const [pickDate, setPickDate] = useState<number>(1);
-  const todayCheck = (day: number): Boolean => {
-    const currentYear = dayjs().year();
-    const currentMonth = dayjs().month() + 1;
-    const currentDate = dayjs().date();
-    console.log(currentDate, currentMonth, currentYear);
-    return (
-      currentYear === date.year &&
-      currentMonth === date.month &&
-      currentDate === day
-    );
+  const [calendarArr, setCalendarArr] = useState<Calendars[]>([]);
+  const [pickDate, setPickDate] = useState<string>(
+    dayjs().format("YYYY-MM-DD")
+  );
+
+  const todayCheck = (date: string): Boolean => {
+    return pickDate === date;
   };
 
   const changeMonth = (num: number) => {
@@ -43,29 +33,33 @@ const Calendar = () => {
       setDate({ ...date, month: date.month + num });
     }
   };
-  const clickDate = (num1: number, num2: number, data: CalendarType) => {
-    if (num1 < 7 && num2 > 20) {
+  const clickDate = (idx: number, date: number, format: string) => {
+    if (idx < 7 && date > 20) {
       changeMonth(-1);
-      setPickDate(num2);
-    } else if (num1 > 20 && num2 < 10) {
+    } else if (idx > 20 && date < 10) {
       changeMonth(1);
-      setPickDate(num2);
-    } else {
-      setDateState({
-        date: data.day,
-        dateTotal: data.total || 0,
-        count: data.data.length,
-      });
     }
+    setPickDate(format);
+    getDetail(format);
   };
-  const month = date.month < 10 ? "0" + date.month : date.month;
+
+  const getDetail = async (format: string) => {
+    const now = dayjs(format);
+    const range: Range = {
+      start: now.valueOf(),
+      end: now.endOf("date").valueOf(),
+    };
+
+    const detail = await saleService.getSalesDetail(range);
+    console.log(detail);
+  };
 
   useEffect(() => {
     const current = dayjs(`${date.year}.${date.month}.01`);
     const monthFirst = current.day();
     const currentLength = current.daysInMonth();
     const blank = 7 - ((currentLength + monthFirst) % 7);
-    const range = {
+    const range: Range = {
       start: current.subtract(monthFirst, "day").valueOf(),
       end: current
         .endOf("month")
@@ -74,83 +68,19 @@ const Calendar = () => {
     };
 
     const getSales = async () => {
-      const data = await saleService.get(range);
-      const arr: CalendarType[] = [];
-
-      for (let i = monthFirst; i > 0; i--) {
-        const sales = data.filter((el) => {
-          if (
-            dayjs(el.date).format("YYYY-MM-DD") ===
-            current.startOf("month").subtract(i, "day").format("YYYY-MM-DD")
-          )
-            return el;
-        });
-        let totalPrice = sales.reduce((acc, curr) => acc + curr.totalPrice, 0);
-        arr.push({
-          day: current.startOf("month").subtract(i, "day").date(),
-          data: sales,
-          // total: totalPrice,
-        });
-      }
-
-      let monthTotal = 0;
-      for (let i = 1; i <= currentLength; i++) {
-        const sales = data.filter((el) => {
-          if (
-            dayjs(el.date).format("YYYY-MM-DD") ===
-            current.add(i - 1, "day").format("YYYY-MM-DD")
-          ) {
-            return el;
-          }
-        });
-        let totalPrice = sales.reduce((acc, curr) => acc + curr.totalPrice, 0);
-        monthTotal += totalPrice;
-        arr.push({
-          day: i,
-          data: sales,
-          total: totalPrice,
-        });
-        i == currentLength ? setMonthTotal(monthTotal) : false;
-        todayCheck(i)
-          ? setDateState({
-              date: i,
-              dateTotal: totalPrice,
-              count: sales.length,
-            })
-          : i === pickDate
-          ? setDateState({
-              date: i,
-              dateTotal: totalPrice,
-              count: sales.length,
-            })
-          : false;
-      }
-
-      if (blank < 7) {
-        for (let i = 1; i <= blank; i++) {
-          const sales = data.filter((el) => {
-            if (
-              dayjs(el.date).format("YYYY-MM-DD") ===
-              current.endOf("month").add(i, "day").format("YYYY-MM-DD")
-            ) {
-              return el;
-            }
-          });
-          let totalPrice = sales.reduce(
-            (acc, curr) => acc + curr.totalPrice,
-            0
-          );
-
-          arr.push({
-            day: i,
-            data: sales,
-            // total: totalPrice,
-          });
-        }
-      }
-      setCalendarArr(arr);
+      const data = await saleService.getSales(range);
+      console.log(data);
+      setCalendarArr(data.calendars);
+      setMonthTotal((month) => {
+        return {
+          ...month,
+          total: data.totalPrice,
+          salesCount: data.totalSalesCount,
+        };
+      });
     };
     getSales();
+    getDetail(pickDate);
   }, [date]);
 
   return (
@@ -164,7 +94,12 @@ const Calendar = () => {
                 color="gray"
                 onClick={() => {
                   changeMonth(-1);
-                  setPickDate(1);
+                  setPickDate(
+                    dayjs(`${date.year}.${date.month}.01`)
+                      .subtract(1, "month")
+                      .startOf("month")
+                      .format("YYYY-MM-DD")
+                  );
                 }}
               />
               <BiSolidChevronRightSquare
@@ -172,7 +107,12 @@ const Calendar = () => {
                 color="gray"
                 onClick={() => {
                   changeMonth(1);
-                  setPickDate(1);
+                  setPickDate(
+                    dayjs(`${date.year}.${date.month}.01`)
+                      .add(1, "month")
+                      .startOf("month")
+                      .format("YYYY-MM-DD")
+                  );
                 }}
               />
             </div>
@@ -193,20 +133,22 @@ const Calendar = () => {
                   <div
                     key={i}
                     className={`border-b-2 border-b-gray-100 py-3  ${
-                      (i < 7 && +el.day > 20) || (i > 20 && +el.day < 10)
+                      (i < 7 && el.date > 20) || (i > 20 && el.date < 10)
                         ? "opacity-40 cursor-text"
                         : "cursor-pointer"
                     } `}
                     onClick={() => {
-                      clickDate(i, +el.day, el);
+                      clickDate(i, el.date, el.format);
                     }}
                   >
                     <p
                       className={`mb-3 text-lg ${
                         i % 7 == 0 ? "text-red-600" : null
-                      } ${i % 7 === 6 ? "text-blue-600" : null}`}
+                      } ${i % 7 === 6 ? "text-blue-600" : null} ${
+                        todayCheck(el.format) ? "bg-blue-600 text-white" : null
+                      }`}
                     >
-                      {el.day}
+                      {el.date}
                     </p>
 
                     <span

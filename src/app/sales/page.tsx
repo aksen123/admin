@@ -19,23 +19,23 @@ export default function SalesPage() {
         <div className="flex items-center justify-between px-4">
           <div>
             <span className="text-gray-400 text-sm">총 매출 금액</span>
-            <p className="font-semibold text-xl">{amount.toLocaleString()}원</p>
+            <p className="font-semibold text-xl">
+              {amount.total.toLocaleString()}원
+            </p>
           </div>
           <MdCalendarMonth size={30} color="blue" />
         </div>
         <div className="flex items-center justify-between px-4 relative before:absolute before:w-[1px] before:h-full before:bg-black before:left-0 first:px-0 first:pr-4 ">
           <div>
             <span className="text-gray-400 text-sm">총 매출 건수</span>
-            <p className="font-semibold text-xl">
-              {dateState.dateTotal.toLocaleString()}원
-            </p>
+            <p className="font-semibold text-xl">{amount.salesCount}건</p>
           </div>
           <RiMoneyDollarCircleFill size={30} color="blue" />
         </div>
         <div className="flex items-center justify-between px-4 relative before:absolute before:w-[1px] before:h-full before:bg-black before:left-0 first:px-0 first:pr-4">
           <div>
             <span className="text-gray-400 text-sm">총 주문 건수</span>
-            <p className="font-semibold text-xl">{dateState.count}건</p>
+            <p className="font-semibold text-xl">{amount.orderCount}건</p>
           </div>
           <RiMoneyDollarCircleFill size={30} color="blue" />
         </div>
