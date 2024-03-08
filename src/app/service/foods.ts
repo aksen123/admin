@@ -13,7 +13,7 @@ export const foodsService = {
   delete(id: string) {
     return api.delete(`/api/menu/${id}`);
   },
-  sort(obj: any) {
-    return apiFile.post("/api/sort", obj);
+  sort(foods: Food[]) {
+    return apiFile.post("/api/sort", foods);
   },
 };

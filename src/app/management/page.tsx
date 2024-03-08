@@ -13,10 +13,10 @@ export default function ManagementPage() {
   const { data: foods = [], isLoading } = useSWR("/api/menu", () =>
     foodsService.get()
   );
-  const [isAddFoodPopup, setIsAddFoodPopup] = useState<boolean>(false);
-  const [foodData, setFoodData] = useState<Food | null>(null);
   const [test, setTest] = useState<Food[]>([]);
   const [sortNumber, setSortNumber] = useState(0);
+  const [isAddFoodPopup, setIsAddFoodPopup] = useState<boolean>(false);
+  const [foodData, setFoodData] = useState<Food | null>(null);
   const editMenu = (food: Food) => {
     setFoodData(food);
     setIsAddFoodPopup(true);
@@ -57,8 +57,11 @@ export default function ManagementPage() {
           tag={"tbody"}
           animation={200}
           list={test}
-          setList={() => {}}
+          setList={() => {
+            console.log("드래그~~~~~");
+          }}
           onEnd={(e: SortableEvent) => {
+            console.log("드래그 끝~~");
             const list = [...test];
             const obj = list.splice(e.oldIndex as number, 1);
             list.splice(e.newIndex as number, 0, ...obj);
