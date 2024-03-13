@@ -32,12 +32,21 @@ export interface Calendars {
   total: number | null;
   format: string;
 }
+interface MonthInformation {
+  total: number;
+  salesCount: number;
+  orderCount: number;
+  prevTotal: number;
+}
 export interface GetPayment {
-  totalPrice: number;
-  totalSalesCount: number;
+  monthInfo: MonthInformation;
   calendars: Calendars[];
 }
-
+export interface GetSaleDetail {
+  sales: Sales[];
+  total: number;
+  count: number;
+}
 export interface Range {
   start: number;
   end: number;

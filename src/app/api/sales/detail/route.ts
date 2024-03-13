@@ -1,5 +1,6 @@
 import db from "@/app/service/firebase";
 import { Sales } from "@/types/service";
+import dayjs from "dayjs";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { NextRequest } from "next/server";
 
@@ -13,22 +14,29 @@ export async function GET(request: NextRequest) {
     where("date", ">=", start && +start),
     where("date", "<=", end && +end)
   );
+
   const getPayment = await getDocs(payments);
   let data = getPayment.docs.map((doc) => ({
     ...doc.data(),
   })) as Sales[];
+
+  let dateTotal = 0;
+
   data = data.map((payment) => {
+    dateTotal += payment.totalPrice;
     const orders = {
       ...payment,
       orders: payment.orders.map((el) => {
-        const data = { date: el.date, order: JSON.parse(el.order as string) };
+        const data = { ...el, order: JSON.parse(el.order as string) };
         return data;
       }),
     };
 
     return orders;
   });
-  return Response.json({ success: true, data: data });
-}
 
-// 그날의 총 매출 뽑아서 넣어주기 ?
+  return Response.json({
+    success: true,
+    data: { sales: data, total: dateTotal, count: data.length },
+  });
+}

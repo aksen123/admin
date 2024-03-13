@@ -1,6 +1,12 @@
 "use client";
 
-import { Calendars, Range, Sales } from "@/types/service";
+import {
+  Calendars,
+  GetPayment,
+  GetSaleDetail,
+  Range,
+  Sales,
+} from "@/types/service";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import {
@@ -10,12 +16,14 @@ import {
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { DateState, MonthTotal, calendarState } from "../atoms/calendar-atom";
 import { saleService } from "../service/sales";
+import NoSales from "./animations/NoSales";
 
 const Calendar = () => {
   const [date, setDate] = useRecoilState(calendarState);
   const setDateState = useSetRecoilState(DateState);
   const setMonthTotal = useSetRecoilState(MonthTotal);
   const [calendarArr, setCalendarArr] = useState<Calendars[]>([]);
+  const [saleDetail, setSaleDetail] = useState<GetSaleDetail | null>(null);
   const [pickDate, setPickDate] = useState<string>(
     dayjs().format("YYYY-MM-DD")
   );
@@ -51,6 +59,7 @@ const Calendar = () => {
     };
 
     const detail = await saleService.getSalesDetail(range);
+    setSaleDetail(detail);
     console.log(detail);
   };
 
@@ -71,11 +80,9 @@ const Calendar = () => {
       const data = await saleService.getSales(range);
       console.log(data);
       setCalendarArr(data.calendars);
-      setMonthTotal((month) => {
+      setMonthTotal(() => {
         return {
-          ...month,
-          total: data.totalPrice,
-          salesCount: data.totalSalesCount,
+          ...data.monthInfo,
         };
       });
     };
@@ -142,10 +149,12 @@ const Calendar = () => {
                     }}
                   >
                     <p
-                      className={`mb-3 text-lg ${
+                      className={`relative mb-3 text-lg p-2 w-10 h-10 text-center leading-6 ${
                         i % 7 == 0 ? "text-red-600" : null
                       } ${i % 7 === 6 ? "text-blue-600" : null} ${
-                        todayCheck(el.format) ? "bg-blue-600 text-white" : null
+                        todayCheck(el.format)
+                          ? "bg-blue-600 text-white rounded-full "
+                          : null
                       }`}
                     >
                       {el.date}
@@ -172,7 +181,63 @@ const Calendar = () => {
           </div>
         </div>
       </div>
-      <div className="w-2/4 p-5 bg-white shadow-2xl rounded-xl">tests</div>
+      <div className="w-2/4 p-5 bg-white shadow-2xl rounded-xl">
+        <h2 className="text-4xl text-center mb-20">
+          매출 내역<span className="text-sm">({pickDate})</span>
+        </h2>
+        {saleDetail?.count === 0 ? (
+          <>
+            <NoSales />
+          </>
+        ) : (
+          <>
+            <table className="w-full">
+              <thead>
+                <tr>
+                  <th className="w-1/2"></th>
+                  <th className="w-1/2"></th>
+                </tr>
+              </thead>
+              <tbody className="">
+                <tr className="border-y-2 border-y-gray-200">
+                  <td className="p-2 bg-blue-600 border-r-2 border-r-gray-200 text-white">
+                    결제 건수
+                  </td>
+                  <td className="p-2 ">{saleDetail?.count}건</td>
+                </tr>
+                <tr className="border-y-2 border-y-gray-200">
+                  <td className="p-2 bg-blue-600 border-r-2 border-r-gray-200 text-white">
+                    결제 금액
+                  </td>
+                  <td className="p-2 ">
+                    {saleDetail?.total.toLocaleString()}원
+                  </td>
+                </tr>
+                <tr className="border-y-2 border-y-gray-200">
+                  <td className="p-2 bg-blue-600 border-r-2 border-r-gray-200 text-white">
+                    취소 건수
+                  </td>
+                  <td className="p-2 ">{0}건</td>
+                </tr>
+                <tr className="border-y-2 border-y-gray-200">
+                  <td className="p-2 bg-blue-600 border-r-2 border-r-gray-200 text-white">
+                    취소 금액
+                  </td>
+                  <td className="p-2 ">{0}원</td>
+                </tr>
+                <tr className="border-y-2 border-y-gray-200">
+                  <td className="p-2 bg-blue-600 border-r-2 border-r-gray-200 text-white">
+                    총 매출 금액
+                  </td>
+                  <td className="p-2 ">
+                    {saleDetail?.total.toLocaleString()}원
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </>
+        )}
+      </div>
     </div>
   );
 };
