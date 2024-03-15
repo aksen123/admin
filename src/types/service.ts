@@ -11,7 +11,8 @@ export interface Food {
   file?: File | any;
 }
 
-interface Orders {
+export interface Orders {
+  id?: string;
   date: number;
   order:
     | string

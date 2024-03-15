@@ -2,7 +2,7 @@ import db from "@/app/service/firebase";
 import { doc, getDoc, deleteDoc } from "firebase/firestore";
 import { NextRequest } from "next/server";
 
-interface Params {
+export interface Params {
   params: {
     slug: string;
   };

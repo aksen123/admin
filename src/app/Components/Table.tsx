@@ -1,9 +1,15 @@
 import React from "react";
+import useSWR from "swr";
+import { getOrder } from "../service/order";
 
-export default function Table() {
+interface TableProps {
+  number: number;
+}
+export default function Table({ number }: TableProps) {
+  // const { data } = useSWR(`/api/order/`, () => getOrder.get(number));
   return (
     <div className="bg-white rounded-xl w-full h-40 p-2 flex flex-col justify-between">
-      <p>테이블 번호</p>
+      <p>{number}</p>
       <div className="line-clamp-4 h-2/3">
         <p>주문내역1</p>
         <p>주문내역2</p>
@@ -20,3 +26,5 @@ export default function Table() {
     </div>
   );
 }
+
+// props로 테이블 번호를 받아 db에서 테이블 번호의 데이터를 받아와 뿌려준다 끝!
