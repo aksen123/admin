@@ -3,13 +3,13 @@
 import { MdCalendarMonth } from "react-icons/md";
 import { RiMoneyDollarCircleFill } from "react-icons/ri";
 import { useRecoilValue } from "recoil";
-import { calendarState, DateState, MonthTotal } from "../atoms/calendar-atom";
+import { calendarState, MonthTotal } from "../atoms/calendar-atom";
 import Calendar from "../Components/Calendar";
 
 export default function SalesPage() {
   const date = useRecoilValue(calendarState);
   const amount = useRecoilValue(MonthTotal);
-  const dateState = useRecoilValue(DateState);
+
   return (
     <article className="w-[90%] flex flex-col gap-10 py-10">
       <h2 className="text-2xl font-bold">

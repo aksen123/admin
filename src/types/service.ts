@@ -1,5 +1,3 @@
-import Calendar from "@/app/Components/Calendar";
-
 export interface Food {
   id: string;
   name: string;
@@ -11,17 +9,15 @@ export interface Food {
   file?: File | any;
 }
 
-export interface Orders {
+export interface Orders extends Order {
   id?: string;
-  date: number;
-  order:
-    | string
-    | {
-        name: string;
-        price: number;
-        count: number;
-      }[];
 }
+
+export interface Order {
+  date: number;
+  order: string;
+}
+
 export interface Sales {
   date: number;
   orders: Orders[];

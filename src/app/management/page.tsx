@@ -1,18 +1,16 @@
 "use client";
 
-import { FaPlus } from "react-icons/fa";
-import useSWR, { mutate } from "swr";
-import { foodsService } from "../service/foods";
-import AddFoodPopup from "../Components/modal/popup/AddFoodPopup";
-import { useEffect, useState } from "react";
-import Image from "next/image";
 import { Food } from "@/types/service";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { FaPlus } from "react-icons/fa";
 import { ReactSortable, SortableEvent } from "react-sortablejs";
+import useSWR, { mutate } from "swr";
+import AddFoodPopup from "../Components/modal/popup/AddFoodPopup";
+import { foodsService } from "../service/foods";
 
 export default function ManagementPage() {
-  const { data: foods = [], isLoading } = useSWR("/api/menu", () =>
-    foodsService.get()
-  );
+  const { data: foods = [] } = useSWR("/api/menu", () => foodsService.get());
   const [test, setTest] = useState<Food[]>([]);
   const [sortNumber, setSortNumber] = useState(0);
   const [isAddFoodPopup, setIsAddFoodPopup] = useState<boolean>(false);
@@ -27,6 +25,7 @@ export default function ManagementPage() {
     const maxNumber = Math.max(...foods.map((obj) => +obj.sort));
     setSortNumber(maxNumber < 0 ? 0 : maxNumber + 1);
   }, [foods]);
+
   return (
     <article className="w-full min-h-[calc(100vh-3rem)] max-h-fit p-10 bg-white flex flex-col">
       <h2 className="text-2xl font-bold">메뉴 관리</h2>
@@ -60,13 +59,13 @@ export default function ManagementPage() {
           setList={() => {
             console.log("드래그~~~~~");
           }}
-          onEnd={(e: SortableEvent) => {
+          onEnd={async (e: SortableEvent) => {
             console.log("드래그 끝~~");
             const list = [...test];
             const obj = list.splice(e.oldIndex as number, 1);
             list.splice(e.newIndex as number, 0, ...obj);
             setTest(list);
-            foodsService.sort(list);
+            await foodsService.sort(list);
           }}
         >
           {test.map((food, i) => (

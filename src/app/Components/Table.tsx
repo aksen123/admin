@@ -1,15 +1,15 @@
-import React from "react";
 import useSWR from "swr";
 import { getOrder } from "../service/order";
 
 interface TableProps {
-  number: number;
+  index: number;
 }
-export default function Table({ number }: TableProps) {
-  // const { data } = useSWR(`/api/order/`, () => getOrder.get(number));
+export default function Table({ index }: TableProps) {
+  const { data } = useSWR([`/api/order`, index], () => getOrder.get(index));
+
   return (
     <div className="bg-white rounded-xl w-full h-40 p-2 flex flex-col justify-between">
-      <p>{number}</p>
+      <p>{index}</p>
       <div className="line-clamp-4 h-2/3">
         <p>주문내역1</p>
         <p>주문내역2</p>
