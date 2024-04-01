@@ -227,7 +227,7 @@ const Calendar = ({ storeName }: Props) => {
                   <p className="w-full border-b-2 border-b-gray-200 p-2">
                     {sale.order.map((menu, i) => {
                       return (
-                        <div
+                        <span
                           key={menu.name + i}
                           className="flex justify-between"
                         >
@@ -238,7 +238,7 @@ const Calendar = ({ storeName }: Props) => {
                           <span className="flex-1 text-right">
                             {(menu.price * menu.count).toLocaleString()}원
                           </span>
-                        </div>
+                        </span>
                       );
                     })}
                   </p>
