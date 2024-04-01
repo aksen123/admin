@@ -1,19 +1,19 @@
 import api, { apiFile } from "./axios";
 import { Food } from "@/types/service";
 export const foodsService = {
-  get(): Promise<Food[]> {
-    return api.get("/api/menu");
+  get(store: string | null): Promise<Food[]> {
+    return api.get("/api/menu", { params: { store } });
   },
-  add(formData: FormData) {
-    return apiFile.post("/api/menu", formData);
+  add(formData: FormData, store: string | null) {
+    return apiFile.post("/api/menu", formData, { params: { store } });
   },
-  update(formData: FormData) {
-    return apiFile.put("/api/menu", formData);
+  update(formData: FormData, store: string | null) {
+    return apiFile.put("/api/menu", formData, { params: { store } });
   },
-  delete(id: string) {
-    return api.delete(`/api/menu/${id}`);
+  delete(id: string, store: string | null) {
+    return api.delete(`/api/menu/${id}`, { params: { store } });
   },
-  sort(foods: Food[]) {
-    return apiFile.post("/api/sort", foods);
+  sort(foods: Food[], store: string | null) {
+    return api.post("/api/sort", { foods, store });
   },
 };

@@ -10,7 +10,9 @@ import AddFoodPopup from "../Components/modal/popup/AddFoodPopup";
 import { foodsService } from "../service/foods";
 
 export default function ManagementPage() {
-  const { data: foods = [] } = useSWR("/api/menu", () => foodsService.get());
+  const { data: foods = [], isLoading } = useSWR("/api/menu", () =>
+    foodsService.get()
+  );
   const [test, setTest] = useState<Food[]>([]);
   const [sortNumber, setSortNumber] = useState(0);
   const [isAddFoodPopup, setIsAddFoodPopup] = useState<boolean>(false);
@@ -21,9 +23,12 @@ export default function ManagementPage() {
   };
 
   useEffect(() => {
-    foods.length > 0 ? setTest(foods) : false;
-    const maxNumber = Math.max(...foods.map((obj) => +obj.sort));
-    setSortNumber(maxNumber < 0 ? 0 : maxNumber + 1);
+    if (!isLoading) {
+      setTest(foods);
+      const maxNumber = Math.max(...foods.map((obj) => +obj.sort));
+      setSortNumber(maxNumber < 0 ? 0 : maxNumber + 1);
+      console.log("maxNumber : ", maxNumber);
+    }
   }, [foods]);
 
   return (

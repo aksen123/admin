@@ -1,14 +1,17 @@
-import { Orders } from "@/types/service";
+import { Menu, StoreStatus } from "@/types/service";
 import api from "./axios";
 
-interface GetOrders extends Orders {
+interface GetOrders extends Menu {
   id: string;
 }
 export const getOrder = {
-  list(): Promise<Orders[]> {
+  list(): Promise<Menu[]> {
     return api.get("/api/order");
   },
-  get(index: number): Promise<Orders> {
-    return api.get(`/api/order/${index}`);
+  get(store: string): Promise<StoreStatus> {
+    return api.get(`/api/order/${store}`);
+  },
+  test() {
+    return api.get("/api/test/test222");
   },
 };

@@ -1,10 +1,12 @@
 "use client";
 
+import useSWR from "swr";
 import Table from "./Components/Table";
+import { storeApi } from "./service/store";
 
 export default function Home() {
-  // const { data } = useSWR("/api/order", () => getOrder.list());
-  // console.log(data);
+  const { data: stores = [] } = useSWR("/api/store", () => storeApi.list());
+  console.log(stores);
 
   const table = {
     count: 1,
@@ -20,9 +22,9 @@ export default function Home() {
    */
 
   return (
-    <div className="w-full min-h-full h-fit grid grid-cols-4 justify-center items-center gap-8 p-5">
-      {[...Array(table.count).keys()].map((index) => (
-        <Table key={index} index={index + 1} />
+    <div className="w-full min-h-full h-fit grid grid-cols-4 justify-center items-start gap-8 p-5">
+      {stores.map((store, index) => (
+        <Table key={index} store={store} />
       ))}
     </div>
   );

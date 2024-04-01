@@ -12,9 +12,15 @@ interface PopupType {
   food: Food | null;
   onClose: () => void;
   sort?: number;
+  storeName: string | null;
 }
 
-export default function AddFoodPopup({ food, onClose, sort }: PopupType) {
+export default function AddFoodPopup({
+  food,
+  onClose,
+  sort,
+  storeName,
+}: PopupType) {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [foodSrc, setFoodSrc] = useState<string | null>(null);
   const [sale, setSale] = useState<boolean>(false);
@@ -28,6 +34,7 @@ export default function AddFoodPopup({ food, onClose, sort }: PopupType) {
     mode: "onChange",
     defaultValues: {},
   });
+  console.log("sort : ", sort);
 
   const onSubmit = async (formFood: Food) => {
     const formData = new FormData();
@@ -40,8 +47,8 @@ export default function AddFoodPopup({ food, onClose, sort }: PopupType) {
     foodSrc && formData.append("src", foodSrc);
     food && formData.append("origin", food.name);
     food
-      ? await foodsService.update(formData)
-      : await foodsService.add(formData);
+      ? await foodsService.update(formData, storeName)
+      : await foodsService.add(formData, storeName);
     alert(`${formFood.name} 음식이 등록되었습니다.`);
     mutate("/api/menu");
     onClose();
@@ -51,7 +58,7 @@ export default function AddFoodPopup({ food, onClose, sort }: PopupType) {
   useEffect(() => {
     setFocus("name");
     if (food) {
-      setSale(food.soldOut == "true");
+      setSale(food.soldOut);
       setImageUrl(food.src ? food.src : null);
       setFoodSrc(food.src ? food.src : null);
     }
