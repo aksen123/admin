@@ -4,14 +4,15 @@ import db from "@/app/service/firebase";
 import { doc, updateDoc } from "firebase/firestore";
 
 interface DataType {
-  [k: string]: FormDataEntryValue;
+  foods: Food[];
+  store: string;
 }
 
 export async function POST(request: NextRequest) {
-  const foods: Food[] = await request.json();
-
-  foods.forEach((food, i) => {
-    const menu = doc(db, "foods", food.name);
+  const data: DataType = await request.json();
+  const store = data.store;
+  data.foods.forEach((food, i) => {
+    const menu = doc(db, "stores", store, "menu", food.name);
     updateDoc(menu, {
       sort: i,
     });

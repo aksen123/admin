@@ -2,14 +2,16 @@ import db from "@/app/service/firebase";
 import { doc, getDoc, deleteDoc } from "firebase/firestore";
 import { NextRequest } from "next/server";
 
-interface Params {
+export interface Params {
   params: {
     slug: string;
   };
 }
 
 export async function DELETE(request: NextRequest, context: Params) {
-  console.log(context.params.slug);
+  const { searchParams } = request.nextUrl;
+  const store = searchParams.get("store");
+
   const food = await getDoc(doc(db, "foods", context.params.slug));
 
   if (!food) {
@@ -22,7 +24,9 @@ export async function DELETE(request: NextRequest, context: Params) {
     );
   }
 
-  await deleteDoc(doc(db, "foods", context.params.slug));
+  await deleteDoc(
+    doc(db, "stores", store as string, "menu", context.params.slug)
+  );
 
   return Response.json({ success: true });
 }

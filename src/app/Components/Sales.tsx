@@ -4,14 +4,18 @@ import { MdCalendarMonth } from "react-icons/md";
 import { RiMoneyDollarCircleFill } from "react-icons/ri";
 import { useRecoilValue } from "recoil";
 import { calendarState, MonthTotal } from "../atoms/calendar-atom";
-import Calendar from "../Components/Calendar";
+import Calendar from "./Calendar";
 
-export default function SalesPage() {
+interface Props {
+  storeName: string | null;
+}
+
+export default function SalesPage({ storeName }: Props) {
   const date = useRecoilValue(calendarState);
   const amount = useRecoilValue(MonthTotal);
 
   return (
-    <article className="w-[90%] flex flex-col gap-10 py-10">
+    <div className="w-full flex flex-col gap-10">
       <h2 className="text-2xl font-bold">
         {date.year}년 {date.month}월 매출현황
       </h2>
@@ -44,7 +48,7 @@ export default function SalesPage() {
           <RiMoneyDollarCircleFill size={30} color="blue" />
         </div>
       </div>
-      <Calendar />
-    </article>
+      <Calendar storeName={storeName} />
+    </div>
   );
 }

@@ -1,5 +1,5 @@
-import Lottie from "react-lottie-player";
 import animation from "@/../public/nosales.json";
+import Lottie from "react-lottie-player";
 
 export default function NoSales() {
   return (

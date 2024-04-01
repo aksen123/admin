@@ -1,5 +1,3 @@
-import Calendar from "@/app/Components/Calendar";
-
 export interface Food {
   id: string;
   name: string;
@@ -7,24 +5,21 @@ export interface Food {
   src: string;
   sort: number;
   count: number;
-  soldOut: boolean | string;
+  soldOut: boolean;
   file?: File | any;
 }
 
-interface Orders {
-  date: number;
-  order:
-    | string
-    | {
-        name: string;
-        price: number;
-        count: number;
-      }[];
+export interface Menu {
+  name: string;
+  price: number;
+  count: number;
 }
+
 export interface Sales {
+  id?: string;
   date: number;
-  orders: Orders[];
-  totalPrice: number;
+  order: Menu[];
+  total: number;
 }
 
 export interface Calendars {
@@ -50,4 +45,9 @@ export interface GetSaleDetail {
 export interface Range {
   start: number;
   end: number;
+}
+
+export interface StoreStatus {
+  count: number;
+  total: number;
 }
