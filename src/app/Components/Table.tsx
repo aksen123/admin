@@ -15,7 +15,7 @@ export default function Table({ store }: TableProps) {
   };
   return (
     <div
-      className="bg-white rounded-xl w-full h-40 p-2 flex flex-col justify-start"
+      className="bg-white rounded-xl w-full p-2 flex flex-col justify-start"
       onClick={onClick}
     >
       <p className="text-2xl text-blue-500 font-semibold mb-5">{store}지점</p>

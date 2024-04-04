@@ -6,11 +6,6 @@ import { storeApi } from "./service/store";
 
 export default function Home() {
   const { data: stores = [] } = useSWR("/api/store", () => storeApi.list());
-  console.log(stores);
-
-  const table = {
-    count: 1,
-  };
 
   /**
    * TODO: *

@@ -44,7 +44,7 @@ export default function SalesPage() {
           <RiMoneyDollarCircleFill size={30} color="blue" />
         </div>
       </div>
-      <Calendar />
+      {/* <Calendar /> */}
     </article>
   );
 }
