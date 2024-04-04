@@ -8,10 +8,11 @@ import { ReactSortable, SortableEvent } from "react-sortablejs";
 import useSWR, { mutate } from "swr";
 import AddFoodPopup from "../Components/modal/popup/AddFoodPopup";
 import { foodsService } from "../service/foods";
+import { defaultApi } from "../service/default";
 
 export default function ManagementPage() {
   const { data: foods = [], isLoading } = useSWR("/api/menu", () =>
-    foodsService.get()
+    defaultApi.list()
   );
   const [test, setTest] = useState<Food[]>([]);
   const [sortNumber, setSortNumber] = useState(0);
@@ -70,7 +71,7 @@ export default function ManagementPage() {
             const obj = list.splice(e.oldIndex as number, 1);
             list.splice(e.newIndex as number, 0, ...obj);
             setTest(list);
-            await foodsService.sort(list);
+            // await foodsService.sort(list);
           }}
         >
           {test.map((food, i) => (
@@ -124,10 +125,10 @@ export default function ManagementPage() {
                       "정말로 삭제 하시겠습니까?",
                       "삭제",
                       async () => {
-                        await foodsService.delete(food.id).then(() => {
-                          alert(`${food.name} 메뉴가 삭제되었습니다.`);
-                          mutate("/api/menu");
-                        });
+                        // await foodsService.delete(food.id).then(() => {
+                        //   alert(`${food.name} 메뉴가 삭제되었습니다.`);
+                        //   mutate("/api/menu");
+                        // });
                       }
                     )
                   }
@@ -145,6 +146,7 @@ export default function ManagementPage() {
         <AddFoodPopup
           food={foodData}
           sort={sortNumber}
+          storeName={""}
           onClose={() => {
             setIsAddFoodPopup(false);
             setFoodData(null);
