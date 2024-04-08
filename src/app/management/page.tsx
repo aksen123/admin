@@ -8,10 +8,11 @@ import { ReactSortable, SortableEvent } from "react-sortablejs";
 import useSWR, { mutate } from "swr";
 import AddFoodPopup from "../Components/modal/popup/AddFoodPopup";
 import { foodsService } from "../service/foods";
+import { defaultApi } from "../service/default";
 
 export default function ManagementPage() {
   const { data: foods = [], isLoading } = useSWR("/api/menu", () =>
-    foodsService.get()
+    foodsService.get("SYSTEM")
   );
   const [test, setTest] = useState<Food[]>([]);
   const [sortNumber, setSortNumber] = useState(0);
@@ -22,9 +23,19 @@ export default function ManagementPage() {
     setIsAddFoodPopup(true);
   };
 
+  const handleDelete = async (food: Food) => {
+    window.yesNo(food.name, "정말로 삭제 하시겠습니까?", "삭제", async () => {
+      await foodsService.delete(food.id, "SYSTEM").then(() => {
+        alert(`${food.name} 메뉴가 삭제되었습니다.`);
+        mutate("/api/menu");
+      });
+    });
+  };
+
   useEffect(() => {
     if (!isLoading) {
       setTest(foods);
+      console.log(foods);
       const maxNumber = Math.max(...foods.map((obj) => +obj.sort));
       setSortNumber(maxNumber < 0 ? 0 : maxNumber + 1);
       console.log("maxNumber : ", maxNumber);
@@ -49,6 +60,7 @@ export default function ManagementPage() {
             <th className="border-2 border-l-0 border-gray-300 p-2">메뉴 명</th>
             <th className="border-2 border-gray-300 p-2">가격</th>
             <th className="border-2 border-gray-300 p-2">품절</th>
+            <th className="border-2 border-gray-300 p-2">메뉴 숨김</th>
             <th className="w-20 text-center border-2 border-gray-300 p-2">
               수정
             </th>
@@ -70,7 +82,7 @@ export default function ManagementPage() {
             const obj = list.splice(e.oldIndex as number, 1);
             list.splice(e.newIndex as number, 0, ...obj);
             setTest(list);
-            await foodsService.sort(list);
+            // await foodsService.sort(list);
           }}
         >
           {test.map((food, i) => (
@@ -90,7 +102,7 @@ export default function ManagementPage() {
                 <span>{food.name}</span>
               </td>
               <td className="border-2 border-gray-300 p-2">
-                {food.price.toLocaleString()}원
+                {food.price?.toLocaleString()}원
               </td>
               <td className="border-2 border-gray-300">
                 <span
@@ -106,6 +118,9 @@ export default function ManagementPage() {
                   {food.soldOut ? "품절" : "판매가능"}
                 </span>
               </td>
+              <td className="border-2 border-gray-300">
+                <input type="checkbox" name="" id="test" />
+              </td>
               <td className="border-2 border-gray-300 p-2 text-center">
                 <button
                   className="text-gray-500 rounded-xl p-2 bg-gray-200 font-semibold "
@@ -118,19 +133,9 @@ export default function ManagementPage() {
               </td>
               <td className="border-2 border-r-0 border-gray-300 p-2 text-center">
                 <button
-                  onClick={() =>
-                    window.yesNo(
-                      food.name,
-                      "정말로 삭제 하시겠습니까?",
-                      "삭제",
-                      async () => {
-                        await foodsService.delete(food.id).then(() => {
-                          alert(`${food.name} 메뉴가 삭제되었습니다.`);
-                          mutate("/api/menu");
-                        });
-                      }
-                    )
-                  }
+                  onClick={() => {
+                    handleDelete(food);
+                  }}
                   className="text-red-500 rounded-xl p-2 bg-red-200 font-semibold "
                 >
                   삭제
@@ -145,6 +150,7 @@ export default function ManagementPage() {
         <AddFoodPopup
           food={foodData}
           sort={sortNumber}
+          storeName={"SYSTEM"}
           onClose={() => {
             setIsAddFoodPopup(false);
             setFoodData(null);

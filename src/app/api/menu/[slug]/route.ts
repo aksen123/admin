@@ -11,9 +11,9 @@ export interface Params {
 export async function DELETE(request: NextRequest, context: Params) {
   const { searchParams } = request.nextUrl;
   const store = searchParams.get("store");
-
-  const food = await getDoc(doc(db, "foods", context.params.slug));
-
+  const { slug } = context.params;
+  const menuDoc = doc(db, store == "SYSTEM" ? "default-menu" : "menu", slug);
+  const food = await getDoc(menuDoc);
   if (!food) {
     return Response.json(
       {
@@ -24,9 +24,7 @@ export async function DELETE(request: NextRequest, context: Params) {
     );
   }
 
-  await deleteDoc(
-    doc(db, "stores", store as string, "menu", context.params.slug)
-  );
+  await deleteDoc(menuDoc);
 
   return Response.json({ success: true });
 }
