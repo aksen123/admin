@@ -4,8 +4,6 @@ import { foodsService } from "@/app/service/foods";
 import { useForm } from "react-hook-form";
 import { Food } from "@/types/service";
 import { mutate } from "swr";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { firebaseApp } from "@/app/service/firebase";
 import Image from "next/image";
 
 interface PopupType {
@@ -34,7 +32,7 @@ export default function AddFoodPopup({
     mode: "onChange",
     defaultValues: {},
   });
-  console.log("sort : ", sort);
+  console.log("sort : ", sort, food?.id);
 
   const onSubmit = async (formFood: Food) => {
     const formData = new FormData();
@@ -45,11 +43,12 @@ export default function AddFoodPopup({
     }
     formData.append("sort", food ? food.sort + "" : sort + "");
     foodSrc && formData.append("src", foodSrc);
+    food && formData.append("id", food.id);
     food && formData.append("origin", food.name);
     food
       ? await foodsService.update(formData, storeName)
       : await foodsService.add(formData, storeName);
-    alert(`${formFood.name} 음식이 등록되었습니다.`);
+    alert(`${formFood.name} 음식이 ${food ? "수정" : "등록"}되었습니다.`);
     mutate("/api/menu");
     onClose();
     imageUrl && URL.revokeObjectURL(imageUrl);

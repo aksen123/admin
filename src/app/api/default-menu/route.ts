@@ -8,5 +8,6 @@ export async function GET() {
       return { id: doc.id, sort: doc.get("sort"), ...doc.data() };
     })
     .sort((a, b) => a.sort - b.sort);
+  console.log(data);
   return Response.json({ success: true, data });
 }

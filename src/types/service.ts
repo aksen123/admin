@@ -6,6 +6,7 @@ export interface Food {
   sort: number;
   count: number;
   soldOut: boolean;
+  hide: boolean;
   file?: File | any;
 }
 

@@ -1,37 +1,43 @@
 import {
-  collection,
   getDocs,
   doc,
   setDoc,
   getDoc,
   updateDoc,
   deleteDoc,
-  DocumentSnapshot,
+  query,
+  collection,
+  where,
+  addDoc,
 } from "firebase/firestore";
 import db, { firebaseApp } from "@/app/service/firebase";
 import { NextRequest } from "next/server";
 import { Food } from "@/types/service";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { storeApi } from "@/app/service/store";
 interface DataType {
   [k: string]: FormDataEntryValue;
 }
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
-  console.log(searchParams.get("store"), "get api!!");
   const store = searchParams.get("store");
-  const foodCollection = await getDocs(
-    collection(db, "stores", store as string, "menu")
-  );
-  const data = foodCollection.docs
-    .map((doc) => ({
-      id: doc.id,
-      sort: doc.get("sort"),
-      ...doc.data(),
-    }))
-    .sort((a, b) => a.sort - b.sort);
+  const data = await getData(store);
   return Response.json({ success: true, data: data });
 }
+
+const getData = async (store: string | null) => {
+  const menus =
+    store == "SYSTEM"
+      ? await getDocs(collection(db, "default-menu"))
+      : await getDocs(
+          query(collection(db, "menu"), where("store", "==", store))
+        );
+  const data = menus.docs
+    .map((el) => ({ id: el.id, sort: el.get("sort"), ...el.data() }))
+    .sort((a, b) => a.sort - b.sort);
+  return data;
+};
 
 export async function POST(request: NextRequest) {
   const { searchParams } = request.nextUrl;
@@ -42,11 +48,9 @@ export async function POST(request: NextRequest) {
     Array.from(formData.entries()).filter((el) => !el.includes("file"))
   );
 
-  const check = await getDoc(
-    doc(db, "stores", store as string, "menu", data.name as string)
-  );
-  // TODO: 이미 등록된 음식인지 체크
-  if (check.data()) {
+  // // TODO: 이미 등록된 음식인지 체크
+  const check = await checkDuplicate(store as string, data.name as string);
+  if (!check) {
     return Response.json(
       {
         success: false,
@@ -60,25 +64,12 @@ export async function POST(request: NextRequest) {
     const storageRef = ref(firebaseApp, `menu/${file.name}`);
     uploadBytes(storageRef, file as File).then((snapshot) => {
       getDownloadURL(snapshot.ref).then((url) => {
-        setDoc(
-          doc(db, "stores", store as string, "menu", data.name as string),
-          {
-            ...data,
-            price: +data.price,
-            src: url,
-            soldOut: data.soldOut === "true",
-          }
-        );
+        setMenu(data, store, url);
       });
     });
     return Response.json({ success: true });
   } else {
-    setDoc(doc(db, "stores", store as string, "menu", data.name as string), {
-      ...data,
-      sort: +data.sort,
-      price: +data.price,
-      soldOut: data.soldOut === "true",
-    });
+    await setMenu(data, store);
     return Response.json({ success: true });
   }
 }
@@ -89,84 +80,103 @@ export async function PUT(request: NextRequest) {
 
   const formData = await request.formData();
   const file = formData.get("file") as File;
+  const documentID = formData.get("id");
   const origin = formData.get("origin");
   const data: DataType = Object.fromEntries(
     Array.from(formData.entries()).filter(
       (el) => !el.includes("file") && !el.includes("origin")
     )
   );
-  const check = await getDoc(
-    doc(db, "stores", store as string, "menu", data.name as string)
+  const check = await checkDuplicate(store as string, data.name as string);
+  console.log("documentID ::", documentID);
+  const originMenu = doc(
+    db,
+    store == "SYSTEM" ? "default-menu" : "menu",
+    documentID as string
   );
-  console.log("check : ", check.data());
-  if (data.name === origin) {
-    const originMenu = doc(
-      db,
-      "stores",
-      store as string,
-      "menu",
-      origin as string
+
+  let updateData: { [key: string]: any } = {
+    ...data,
+    price: +data.price,
+    sort: +data.sort,
+    soldOut: data.soldOut == "true",
+  };
+  if (typeof file != "string") {
+    const storageRef = ref(firebaseApp, `menu/${file.name}`);
+    const snapshot = await uploadBytes(storageRef, file as File);
+    const imgUrl = await getDownloadURL(snapshot.ref);
+    updateData.src = imgUrl;
+  }
+  if (!check && data.name !== origin) {
+    console.log("중복!!");
+    return Response.json(
+      {
+        success: false,
+        error: { message: "같은 이름의 메뉴가 있습니다." },
+      },
+      { status: 500 }
     );
-    if (typeof file != "string") {
-      const storageRef = ref(firebaseApp, `menu/${file.name}`);
-      uploadBytes(storageRef, file as File).then((snapshot) => {
-        getDownloadURL(snapshot.ref).then((url) => {
-          updateDoc(originMenu, {
-            ...data,
-            price: +data.price,
-            sort: +data.sort,
-            soldOut: data.soldOut == "true",
-            src: url,
-          });
-        });
-      });
-    } else {
-      await updateDoc(originMenu, {
-        ...data,
-        sort: +data.sort,
-        price: +data.price,
-        soldOut: data.soldOut == "true",
-      });
-    }
-  } else {
-    if (check.data()) {
-      console.log("중복!!");
-      return Response.json(
-        {
-          success: false,
-          error: { message: "같은 이름의 메뉴가 있습니다." },
-        },
-        { status: 500 }
-      );
-    }
-    await deleteDoc(
-      doc(db, "stores", store as string, "menu", origin as string)
-    );
-    if (typeof file != "string") {
-      const storageRef = ref(firebaseApp, `menu/${file.name}`);
-      uploadBytes(storageRef, file as File).then((snapshot) => {
-        getDownloadURL(snapshot.ref).then((url) => {
-          setDoc(
-            doc(db, "stores", store as string, "menu", data.name as string),
-            {
-              ...data,
-              sort: +data.sort,
-              price: +data.price,
-              src: url,
-              soldOut: data.soldOut === "true",
-            }
-          );
-        });
-      });
-      return Response.json({ success: true });
-    } else {
-      setDoc(doc(db, "stores", store as string, "menu", data.name as string), {
-        ...data,
-        sort: +data.sort,
-        price: +data.price,
-      });
-      return Response.json({ success: true });
-    }
+  }
+  await updateDoc(originMenu, updateData);
+
+  if (store == "SYSTEM") {
+    const stores = await storeApi.list();
+    stores.map((el) => {
+      const store = doc(db, "menu", `${el}_${documentID}`);
+      updateDoc(store, updateData);
+    });
   }
   return Response.json({ success: true });
 }
+
+const setMenu = async (data: DataType, store: string | null, url?: string) => {
+  if (store == "SYSTEM") {
+    const stores = await storeApi.list();
+    const newMenu = doc(collection(db, "default-menu"));
+    await setDoc(newMenu, {
+      ...data,
+      sort: +data.sort,
+      price: +data.price,
+      src: url ? url : null,
+      soldOut: data.soldOut === "true",
+      unique: newMenu.id,
+    });
+    const menuData = await (
+      await getDoc(doc(db, "default-menu", newMenu.id))
+    ).data();
+    stores.forEach((el) => {
+      setDoc(doc(db, "menu", el + "_" + newMenu.id), {
+        ...menuData,
+        store: el,
+      });
+    });
+  } else {
+    const newMenu = doc(collection(db, "menu"));
+    const documentID = store + `_${newMenu.id}`;
+    await setDoc(doc(db, "menu", documentID), {
+      ...data,
+      sort: +data.sort,
+      price: +data.price,
+      soldOut: data.soldOut === "true",
+      store: store,
+      unique: newMenu.id,
+    });
+  }
+};
+
+const checkDuplicate = async (store: string, menu: string) => {
+  const check =
+    store == "SYSTEM"
+      ? await getDocs(
+          query(collection(db, "default-menu"), where("name", "==", menu))
+        )
+      : await getDocs(
+          query(
+            collection(db, "menu"),
+            where("name", "==", menu),
+            where("store", "==", store)
+          )
+        );
+
+  return check.empty;
+};

@@ -3,7 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import SalesPage from "../Components/Sales";
 import { useState } from "react";
-import Management from "../Components/Managment";
+import Management from "../Components/Management";
 
 export default function page() {
   const searchParams = useSearchParams();
