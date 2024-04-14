@@ -14,12 +14,12 @@ export default function ManagementPage() {
   const { data: foods = [], isLoading } = useSWR("/api/menu", () =>
     foodsService.get("SYSTEM")
   );
-  const [test, setTest] = useState<Food[]>([]);
+  const [foodsData, setFoodsData] = useState<Food[]>([]);
   const [sortNumber, setSortNumber] = useState(0);
   const [isAddFoodPopup, setIsAddFoodPopup] = useState<boolean>(false);
-  const [foodData, setFoodData] = useState<Food | null>(null);
+  const [food, setFood] = useState<Food | null>(null);
   const editMenu = (food: Food) => {
-    setFoodData(food);
+    setFood(food);
     setIsAddFoodPopup(true);
   };
 
@@ -34,7 +34,7 @@ export default function ManagementPage() {
 
   useEffect(() => {
     if (!isLoading) {
-      setTest(foods);
+      setFoodsData(foods);
       console.log(foods);
       const maxNumber = Math.max(...foods.map((obj) => +obj.sort));
       setSortNumber(maxNumber < 0 ? 0 : maxNumber + 1);
@@ -72,20 +72,20 @@ export default function ManagementPage() {
         <ReactSortable
           tag={"tbody"}
           animation={200}
-          list={test}
+          list={foodsData}
           setList={() => {
             console.log("드래그~~~~~");
           }}
           onEnd={async (e: SortableEvent) => {
             console.log("드래그 끝~~");
-            const list = [...test];
+            const list = [...foodsData];
             const obj = list.splice(e.oldIndex as number, 1);
             list.splice(e.newIndex as number, 0, ...obj);
-            setTest(list);
+            setFoodsData(list);
             // await foodsService.sort(list);
           }}
         >
-          {test.map((food, i) => (
+          {foodsData.map((food, i) => (
             <tr key={food.name + i}>
               <td className="border-2 border-l-0 border-gray-300 p-2">
                 <Image
@@ -119,7 +119,7 @@ export default function ManagementPage() {
                 </span>
               </td>
               <td className="border-2 border-gray-300">
-                <input type="checkbox" name="" id="test" />
+                <input type="checkbox" name="" id="foodsData" />
               </td>
               <td className="border-2 border-gray-300 p-2 text-center">
                 <button
@@ -148,12 +148,12 @@ export default function ManagementPage() {
 
       {isAddFoodPopup && (
         <AddFoodPopup
-          food={foodData}
+          food={food}
           sort={sortNumber}
           storeName={"SYSTEM"}
           onClose={() => {
             setIsAddFoodPopup(false);
-            setFoodData(null);
+            setFood(null);
           }}
         />
       )}

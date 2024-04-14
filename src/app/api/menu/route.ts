@@ -101,12 +101,6 @@ export async function PUT(request: NextRequest) {
     sort: +data.sort,
     soldOut: data.soldOut == "true",
   };
-  if (typeof file != "string") {
-    const storageRef = ref(firebaseApp, `menu/${file.name}`);
-    const snapshot = await uploadBytes(storageRef, file as File);
-    const imgUrl = await getDownloadURL(snapshot.ref);
-    updateData.src = imgUrl;
-  }
   if (!check && data.name !== origin) {
     console.log("중복!!");
     return Response.json(
@@ -117,6 +111,13 @@ export async function PUT(request: NextRequest) {
       { status: 500 }
     );
   }
+  if (typeof file != "string") {
+    const storageRef = ref(firebaseApp, `menu/${file.name}`);
+    const snapshot = await uploadBytes(storageRef, file as File);
+    const imgUrl = await getDownloadURL(snapshot.ref);
+    updateData.src = imgUrl;
+  }
+
   await updateDoc(originMenu, updateData);
 
   if (store == "SYSTEM") {

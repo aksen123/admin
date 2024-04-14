@@ -52,3 +52,18 @@ export interface StoreStatus {
   count: number;
   total: number;
 }
+export interface StoreInfo {
+  code: string;
+  name: string;
+}
+
+export interface AddStore {
+  storeName: string;
+  address: string;
+  taxId: string;
+  name: string;
+  birthDate: string;
+  phone: string;
+  userId: string;
+  userPassword: string;
+}

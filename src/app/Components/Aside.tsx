@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { FcSalesPerformance } from "react-icons/fc";
 import { FcCalendar } from "react-icons/fc";
+import { FcAddDatabase } from "react-icons/fc";
 import { FcServices } from "react-icons/fc";
 const Aside = () => {
   return (
@@ -18,11 +19,11 @@ const Aside = () => {
           <li>
             <Link
               className="group flex items-center gap-2 w-fit"
-              href={"/sales"}
+              href={"/addStore"}
             >
-              <FcCalendar />
+              <FcAddDatabase />
               <span className=" duration-300 group-hover:text-blue-600 group-hover:font-semibold">
-                매출 달력
+                지점 추가
               </span>
             </Link>
           </li>
