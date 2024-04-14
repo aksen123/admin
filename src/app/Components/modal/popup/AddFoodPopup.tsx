@@ -29,7 +29,7 @@ export default function AddFoodPopup({
     handleSubmit,
     formState: { errors },
   } = useForm<Food>({
-    mode: "onChange",
+    mode: "onSubmit",
     defaultValues: {},
   });
   console.log("sort : ", sort, food?.id);
@@ -112,7 +112,7 @@ export default function AddFoodPopup({
             </label>
             <input
               {...register("price", {
-                required: true,
+                required: "가격을 입력해 주세요",
                 onChange(e: React.ChangeEvent<HTMLInputElement>) {
                   setValue(
                     "price",
@@ -124,6 +124,7 @@ export default function AddFoodPopup({
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
               placeholder="가격입력"
             />
+            <p className="text-red-500">{errors.price?.message}</p>
           </div>
           <div className="mb-5">
             <label className="block mb-2 text-sm font-medium text-gray-900">

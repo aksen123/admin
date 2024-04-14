@@ -10,9 +10,10 @@ export async function GET(request: NextRequest, context: Params) {
 
   const today = dayjs();
   const payments = query(
-    collection(db, "stores", store as string, "payment"),
+    collection(db, "payments"),
     where("date", ">=", today.startOf("day").valueOf()),
-    where("date", "<=", today.endOf("day").valueOf())
+    where("date", "<=", today.endOf("day").valueOf()),
+    where("store", "==", store)
   );
   const data = (await getDocs(payments)).docs.map((el) => el.data()) as Sales[];
   const status: StoreStatus = {
