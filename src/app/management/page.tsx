@@ -82,7 +82,7 @@ export default function ManagementPage() {
             const obj = list.splice(e.oldIndex as number, 1);
             list.splice(e.newIndex as number, 0, ...obj);
             setFoodsData(list);
-            // await foodsService.sort(list);
+            await foodsService.sort(list, "SYSTEM");
           }}
         >
           {foodsData.map((food, i) => (

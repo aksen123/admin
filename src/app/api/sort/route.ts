@@ -11,11 +11,14 @@ interface DataType {
 export async function POST(request: NextRequest) {
   const data: DataType = await request.json();
   const store = data.store;
+  console.log(data.foods, store);
   data.foods.forEach((food, i) => {
-    const menu = doc(db, "stores", store, "menu", food.name);
+    const menu = doc(db, store == "SYSTEM" ? "default-menu" : "menu", food.id);
     updateDoc(menu, {
       sort: i,
     });
   });
   return Response.json({ success: true });
 }
+
+// db 경로 수정하기 ㅁ

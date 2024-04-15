@@ -32,7 +32,6 @@ export default function AddFoodPopup({
     mode: "onSubmit",
     defaultValues: {},
   });
-  console.log("sort : ", sort, food?.id);
 
   const onSubmit = async (formFood: Food) => {
     const formData = new FormData();
@@ -43,7 +42,7 @@ export default function AddFoodPopup({
     }
     formData.append("sort", food ? food.sort + "" : sort + "");
     foodSrc && formData.append("src", foodSrc);
-    food && formData.append("id", food.id);
+    food && formData.append("id", food?.unique);
     food && formData.append("origin", food.name);
     food
       ? await foodsService.update(formData, storeName)

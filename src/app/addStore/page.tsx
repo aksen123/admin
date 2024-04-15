@@ -210,6 +210,7 @@ export default function page() {
                 required: true,
                 pattern: { value: /^[0-9]+$/, message: "숫자만 입력해 주세요" },
                 maxLength: { value: 10, message: "10자리를 입력해 주세요" },
+                minLength: { value: 10, message: "10자리를 입력해 주세요" },
               })}
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-full"
               placeholder="사업자 등록번호를 입력해 주세요."
