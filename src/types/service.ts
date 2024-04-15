@@ -1,5 +1,6 @@
 export interface Food {
   id: string;
+  unique: string;
   name: string;
   price: number;
   src: string;

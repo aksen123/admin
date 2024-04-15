@@ -133,7 +133,7 @@ export default function Management({ storeName }: Props) {
                         "삭제",
                         async () => {
                           await foodsService
-                            .delete(food.id, storeName)
+                            .delete(food.unique, storeName)
                             .then(() => {
                               alert(`${food.name} 메뉴가 삭제되었습니다.`);
                               mutate("/api/menu");

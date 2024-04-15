@@ -25,7 +25,7 @@ export default function ManagementPage() {
 
   const handleDelete = async (food: Food) => {
     window.yesNo(food.name, "정말로 삭제 하시겠습니까?", "삭제", async () => {
-      await foodsService.delete(food.id, "SYSTEM").then(() => {
+      await foodsService.delete(food.unique, "SYSTEM").then(() => {
         alert(`${food.name} 메뉴가 삭제되었습니다.`);
         mutate("/api/menu");
       });
@@ -82,7 +82,7 @@ export default function ManagementPage() {
             const obj = list.splice(e.oldIndex as number, 1);
             list.splice(e.newIndex as number, 0, ...obj);
             setFoodsData(list);
-            // await foodsService.sort(list);
+            await foodsService.sort(list, "SYSTEM");
           }}
         >
           {foodsData.map((food, i) => (
