@@ -25,7 +25,7 @@ export default function ManagementPage() {
 
   const handleDelete = async (food: Food) => {
     window.yesNo(food.name, "정말로 삭제 하시겠습니까?", "삭제", async () => {
-      await foodsService.delete(food.unique, "SYSTEM").then(() => {
+      await foodsService.delete(food.id, "SYSTEM").then(() => {
         alert(`${food.name} 메뉴가 삭제되었습니다.`);
         mutate("/api/menu");
       });
