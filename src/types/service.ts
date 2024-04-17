@@ -21,6 +21,7 @@ export interface Sales {
   id?: string;
   date: number;
   order: Menu[];
+  store: string;
   total: number;
 }
 
@@ -29,11 +30,10 @@ export interface Calendars {
   total: number | null;
   format: string;
 }
-interface MonthInformation {
+export interface MonthInformation {
   total: number;
-  salesCount: number;
-  orderCount: number;
   prevTotal: number;
+  percentage: number | string;
 }
 export interface GetPayment {
   monthInfo: MonthInformation;
@@ -67,4 +67,19 @@ export interface AddStore {
   phone: string;
   userId: string;
   userPassword: string;
+}
+
+export interface Login {
+  id: string;
+  password: string;
+}
+
+export interface User {
+  userId: string;
+  auth: string[];
+  userPassword: string;
+  store: number;
+  name: string;
+  phone: string;
+  birthDate: string;
 }

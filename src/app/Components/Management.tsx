@@ -10,13 +10,13 @@ import AddFoodPopup from "./modal/popup/AddFoodPopup";
 import { foodsService } from "../service/foods";
 
 interface Props {
-  storeName: string | null;
+  storeCode: string | null;
 }
 
-export default function Management({ storeName }: Props) {
+export default function Management({ storeCode }: Props) {
   const { data: foods = [], isLoading } = useSWR(
-    storeName ? "/api/menu" : null,
-    () => foodsService.get(storeName)
+    storeCode ? "/api/menu" : null,
+    () => foodsService.get(storeCode)
   );
   const [test, setTest] = useState<Food[]>([]);
   const [sortNumber, setSortNumber] = useState(0);
@@ -78,7 +78,7 @@ export default function Management({ storeName }: Props) {
               const obj = list.splice(e.oldIndex as number, 1);
               list.splice(e.newIndex as number, 0, ...obj);
               setTest(list);
-              await foodsService.sort(list, storeName);
+              await foodsService.sort(list, storeCode);
             }}
           >
             {test.map((food, i) => (
@@ -133,7 +133,7 @@ export default function Management({ storeName }: Props) {
                         "삭제",
                         async () => {
                           await foodsService
-                            .delete(food.id, storeName)
+                            .delete(food.id, storeCode)
                             .then(() => {
                               alert(`${food.name} 메뉴가 삭제되었습니다.`);
                               mutate("/api/menu");
@@ -155,7 +155,7 @@ export default function Management({ storeName }: Props) {
           <AddFoodPopup
             food={foodData}
             sort={sortNumber}
-            storeName={storeName}
+            storeCode={storeCode}
             onClose={() => {
               setIsAddFoodPopup(false);
               setFoodData(null);

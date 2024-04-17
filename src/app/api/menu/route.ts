@@ -23,6 +23,8 @@ export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
   const store = searchParams.get("store");
   const data = await getData(store);
+
+  console.log(data, store);
   return Response.json({ success: true, data: data });
 }
 
@@ -100,6 +102,7 @@ export async function PUT(request: NextRequest) {
     price: +data.price,
     sort: +data.sort,
     soldOut: data.soldOut == "true",
+    hide: data.hide == "true",
   };
   if (!check && data.name !== origin) {
     console.log("중복!!");
@@ -123,7 +126,7 @@ export async function PUT(request: NextRequest) {
   if (store == "SYSTEM") {
     const stores = await storeApi.list();
     stores.map((el) => {
-      const store = doc(db, "menu", `${el}_${documentID}`);
+      const store = doc(db, "menu", `${el.code}_${documentID}`);
       updateDoc(store, updateData);
     });
   }
@@ -140,6 +143,7 @@ const setMenu = async (data: DataType, store: string | null, url?: string) => {
       price: +data.price,
       src: url ? url : null,
       soldOut: data.soldOut === "true",
+      hide: data.hide === "true",
       unique: newMenu.id,
     });
     const menuData = await (
@@ -159,6 +163,7 @@ const setMenu = async (data: DataType, store: string | null, url?: string) => {
       sort: +data.sort,
       price: +data.price,
       soldOut: data.soldOut === "true",
+      hide: data.hide === "true",
       store: store,
       unique: newMenu.id,
     });

@@ -9,14 +9,16 @@ export default function Table({ code, name }: StoreInfo) {
 
   const router = useRouter();
   const onClick = () => {
-    router.push(`/store?name=${code}`);
+    router.push(`/store?name=${name}&code=${code}`);
   };
   return (
     <div
-      className="bg-white rounded-xl w-full p-2 flex flex-col justify-start"
+      className="bg-white rounded-xl w-full p-2 flex flex-col justify-start overflow-hidden"
       onClick={onClick}
     >
-      <p className="text-2xl text-blue-500 font-semibold mb-5">{name}지점</p>
+      <p className="dashboard text-2xl text-blue-500 font-semibold mb-5 whitespace-nowrap overflow-hidden">
+        {name}점
+      </p>
       <p>주문 건수 : {data?.count}건</p>
       <p>매출 : {data?.total.toLocaleString()}원</p>
     </div>
