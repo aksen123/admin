@@ -1,6 +1,5 @@
 import db from "@/app/service/firebase";
 import { Menu, Sales } from "@/types/service";
-import dayjs from "dayjs";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { NextRequest } from "next/server";
 
@@ -13,14 +12,14 @@ export async function GET(request: NextRequest) {
   console.log(start, end, store);
 
   const payments = query(
-    collection(db, "stores", store as string, "payment"),
+    collection(db, "payments"),
     where("date", ">=", start && +start),
-    where("date", "<=", end && +end)
+    where("date", "<=", end && +end),
+    where("store", "==", store)
   );
 
   const getPayment = await getDocs(payments);
   let data = getPayment.docs.map((doc) => ({
-    id: doc.id,
     ...doc.data(),
   })) as Sales[];
 

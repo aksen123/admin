@@ -10,7 +10,6 @@ export async function GET(req: NextRequest) {
   const end = searchParams.get("end");
   const store = searchParams.get("store");
 
-  console.log(start, end, store);
   const dateDifference = dayjs(end && +end).diff(start && +start, "day");
 
   const prevMonth = dayjs(start && +start);
@@ -19,15 +18,17 @@ export async function GET(req: NextRequest) {
     end: prevMonth.endOf("month").valueOf(),
   };
   const prevPayments = query(
-    collection(db, "stores", store as string, "payment"),
+    collection(db, "payments"),
     where("date", ">=", range.start),
-    where("date", "<=", range.end)
+    where("date", "<=", range.end),
+    where("store", "==", store)
   );
 
   const payments = query(
-    collection(db, "stores", store as string, "payment"),
+    collection(db, "payments"),
     where("date", ">=", start && +start),
-    where("date", "<=", end && +end)
+    where("date", "<=", end && +end),
+    where("store", "==", store)
   );
   const getPrevPayment = await getDocs(prevPayments);
   const getPayment = await getDocs(payments);
@@ -42,10 +43,9 @@ export async function GET(req: NextRequest) {
 
   const prevTotal = prevData.reduce((acc, curr) => acc + curr.total, 0);
 
+  console.log(start, end, store, data, " ::: sales api :::");
   const calendars: Calendars[] = [];
-  let monthSales = 0;
-  let monthSalesCount = 0;
-  let monthOrderCount = 0;
+  let MonthTotal = 0;
 
   for (let i = 0; i <= dateDifference; i += 1) {
     const date = dayjs(start && +start).add(i, "day");
@@ -61,16 +61,7 @@ export async function GET(req: NextRequest) {
         format,
       });
     } else {
-      monthSales += total;
-      monthSalesCount += dateSales.reduce(
-        (acc, curr) => acc + curr.order.length,
-        0
-      );
-      // monthOrderCount += dateSales.reduce(
-      //   (acc, curr) =>
-      //     acc + curr.order.reduce((acc, curr) => acc + curr.order.length, 0),
-      //   0
-      // );
+      MonthTotal += total;
 
       calendars.push({
         date: date.date(),
@@ -80,10 +71,9 @@ export async function GET(req: NextRequest) {
     }
   }
   const monthInfo = {
-    total: monthSales,
-    salesCount: monthSalesCount,
-    orderCount: monthOrderCount,
+    total: MonthTotal,
     prevTotal,
+    percentage: percentage(MonthTotal, prevTotal),
   };
   return Response.json({
     success: true,
@@ -96,6 +86,14 @@ export async function GET(req: NextRequest) {
 
 const percentage = (curr: number, prev: number) => {
   const subtract = curr - prev;
-  const percent = prev == 0 ? 100 : (subtract / prev) * 100;
-  return percent;
+
+  const percent = (subtract / prev) * 100;
+
+  if (percent == Infinity) {
+    return 100;
+  } else if (isNaN(percent)) {
+    return 0;
+  } else {
+    return percent.toFixed(1);
+  }
 };

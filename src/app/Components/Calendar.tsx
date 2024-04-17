@@ -14,10 +14,10 @@ import NoSales from "./animations/NoSales";
 import { useSearchParams } from "next/navigation";
 
 interface Props {
-  storeName: string | null;
+  storeCode: string | null;
 }
 
-const Calendar = ({ storeName }: Props) => {
+const Calendar = ({ storeCode }: Props) => {
   const [date, setDate] = useRecoilState(calendarState);
   const setMonthTotal = useSetRecoilState(MonthTotal);
   const [calendarArr, setCalendarArr] = useState<Calendars[]>([]);
@@ -56,7 +56,7 @@ const Calendar = ({ storeName }: Props) => {
       end: now.endOf("date").valueOf(),
     };
 
-    const detail = await saleService.getSalesDetail(range, storeName);
+    const detail = await saleService.getSalesDetail(range, storeCode);
     setSaleDetail(detail);
     console.log(detail);
   };
@@ -74,7 +74,7 @@ const Calendar = ({ storeName }: Props) => {
         .valueOf(),
     };
     const getSales = async () => {
-      const data = await saleService.getSales(range, storeName);
+      const data = await saleService.getSales(range, storeCode);
       console.log(data);
       setCalendarArr(data.calendars);
       setMonthTotal(() => {
@@ -219,8 +219,11 @@ const Calendar = ({ storeName }: Props) => {
               </tbody>
             </table>
             <div className="overflow-auto max-h-[450px] flex flex-col gap-3">
-              {saleDetail?.sales.map((sale) => (
-                <div key={sale.id} className="w-full border-2 border-gray-200">
+              {saleDetail?.sales.map((sale, i) => (
+                <div
+                  key={sale.date + i}
+                  className="w-full border-2 border-gray-200"
+                >
                   <p className="w-full border-b-2 border-b-gray-200 p-2 bg-blue-600 text-white">
                     결제번호 : {sale.id}
                   </p>

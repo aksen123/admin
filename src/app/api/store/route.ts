@@ -5,6 +5,7 @@ import { NextRequest } from "next/server";
 import { AddStore } from "@/types/service";
 import { storeApi } from "@/app/service/store";
 import { foodsService } from "@/app/service/foods";
+
 export async function GET() {
   const storeCollection = await getDocs(collection(db, "stores"));
   const stores = storeCollection.docs.map((doc) => {
@@ -38,7 +39,8 @@ export async function POST(request: NextRequest) {
     const menus = (await foodsService.get("SYSTEM")).map(
       ({ id, ...rest }) => rest
     );
-    const newCode = Math.max(...stores.map((el) => +el.code)) + 1;
+    const maxNumber = Math.max(...stores.map((el) => +el.code));
+    const newCode = maxNumber < 0 ? 1 + "" : maxNumber + 1 + "";
     const password = crypto
       .createHash("sha256")
       .update(userPassword)
@@ -60,7 +62,10 @@ export async function POST(request: NextRequest) {
       auth: ["ADMIN"],
     };
     menus.map((menu) =>
-      setDoc(doc(db, "menu", newCode + "_" + menu.unique), menu)
+      setDoc(doc(db, "menu", newCode + "_" + menu.unique), {
+        ...menu,
+        store: newCode,
+      })
     );
     await setDoc(doc(db, "stores", newCode + ""), storeInfo);
     await addDoc(collection(db, "users"), userInfo);

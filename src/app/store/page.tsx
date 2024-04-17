@@ -8,6 +8,7 @@ import Management from "../Components/Management";
 export default function page() {
   const searchParams = useSearchParams();
   const store = searchParams.get("name");
+  const code = searchParams.get("code");
   const [viewSwitch, SetViewSwitch] = useState(true);
   return (
     <article className="p-8 w-full">
@@ -37,9 +38,9 @@ export default function page() {
         </div>
       </div>
       {viewSwitch ? (
-        <SalesPage storeName={store} />
+        <SalesPage storeCode={code} />
       ) : (
-        <Management storeName={store} />
+        <Management storeCode={code} />
       )}
     </article>
   );

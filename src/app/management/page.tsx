@@ -60,7 +60,7 @@ export default function ManagementPage() {
             <th className="border-2 border-l-0 border-gray-300 p-2">메뉴 명</th>
             <th className="border-2 border-gray-300 p-2">가격</th>
             <th className="border-2 border-gray-300 p-2">품절</th>
-            <th className="border-2 border-gray-300 p-2">메뉴 숨김</th>
+            <th className="border-2 border-gray-300 p-2">메뉴 활성화</th>
             <th className="w-20 text-center border-2 border-gray-300 p-2">
               수정
             </th>
@@ -119,7 +119,18 @@ export default function ManagementPage() {
                 </span>
               </td>
               <td className="border-2 border-gray-300">
-                <input type="checkbox" name="" id="foodsData" />
+                <span
+                  className={`
+                    ml-2 p-2 text-xs font-medium me-2 px-2.5 py-0.5 rounded
+                    ${
+                      food.hide
+                        ? "bg-red-100 text-red-800"
+                        : "bg-blue-100 text-blue-800"
+                    }
+                 `}
+                >
+                  {food.hide ? "비활성화" : "활성화"}
+                </span>
               </td>
               <td className="border-2 border-gray-300 p-2 text-center">
                 <button
@@ -150,7 +161,7 @@ export default function ManagementPage() {
         <AddFoodPopup
           food={food}
           sort={sortNumber}
-          storeName={"SYSTEM"}
+          storeCode={"SYSTEM"}
           onClose={() => {
             setIsAddFoodPopup(false);
             setFood(null);

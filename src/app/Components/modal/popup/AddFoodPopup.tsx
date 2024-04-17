@@ -10,18 +10,19 @@ interface PopupType {
   food: Food | null;
   onClose: () => void;
   sort?: number;
-  storeName: string | null;
+  storeCode: string | null;
 }
 
 export default function AddFoodPopup({
   food,
   onClose,
   sort,
-  storeName,
+  storeCode,
 }: PopupType) {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [foodSrc, setFoodSrc] = useState<string | null>(null);
   const [sale, setSale] = useState<boolean>(false);
+  const [hide, setHide] = useState<boolean>(false);
   const {
     register,
     setFocus,
@@ -42,11 +43,11 @@ export default function AddFoodPopup({
     }
     formData.append("sort", food ? food.sort + "" : sort + "");
     foodSrc && formData.append("src", foodSrc);
-    food && formData.append("id", food?.unique);
+    food && formData.append("id", food?.id);
     food && formData.append("origin", food.name);
     food
-      ? await foodsService.update(formData, storeName)
-      : await foodsService.add(formData, storeName);
+      ? await foodsService.update(formData, storeCode)
+      : await foodsService.add(formData, storeCode);
     alert(`${formFood.name} 음식이 ${food ? "수정" : "등록"}되었습니다.`);
     mutate("/api/menu");
     onClose();
@@ -57,6 +58,7 @@ export default function AddFoodPopup({
     setFocus("name");
     if (food) {
       setSale(food.soldOut);
+      setHide(food.hide);
       setImageUrl(food.src ? food.src : null);
       setFoodSrc(food.src ? food.src : null);
     }
@@ -143,31 +145,51 @@ export default function AddFoodPopup({
               accept="image/*"
             />
           </div>
-          <div className="mb-5">
-            <label
-              className="block mb-2 text-sm font-medium text-gray-900"
-              htmlFor="soldOut"
-            >
-              품절 유무
-            </label>
-            <input
-              {...register("soldOut")}
-              type="checkbox"
-              checked={sale}
-              onClick={() => setSale(!sale)}
-            />
-            <span
-              className={`
-                    ml-2 p-2 text-xs font-medium me-2 px-2.5 py-0.5 rounded
-                    ${
-                      sale
-                        ? "bg-red-100 text-red-800"
-                        : "bg-blue-100 text-blue-800"
-                    } 
-                 `}
-            >
-              {sale ? "품절" : "판매가능"}
-            </span>
+          <div className="mb-5 flex">
+            <div className="flex-1">
+              <label
+                className="block mb-2 text-sm font-medium text-gray-900"
+                htmlFor="soldOut"
+              >
+                품절 유무
+              </label>
+              <input
+                {...register("soldOut")}
+                type="checkbox"
+                checked={sale}
+                onClick={() => setSale(!sale)}
+              />
+              <span
+                className={`
+              ml-2 p-2 text-xs font-medium me-2 px-2.5 py-0.5 rounded
+              ${sale ? "bg-red-100 text-red-800" : "bg-blue-100 text-blue-800"} 
+              `}
+              >
+                {sale ? "품절" : "판매가능"}
+              </span>
+            </div>
+            <div className="flex-1">
+              <label
+                className="block mb-2 text-sm font-medium text-gray-900"
+                htmlFor="soldOut"
+              >
+                메뉴 활성화
+              </label>
+              <input
+                {...register("hide")}
+                type="checkbox"
+                checked={hide}
+                onClick={() => setHide(!hide)}
+              />
+              <span
+                className={`
+              ml-2 p-2 text-xs font-medium me-2 px-2.5 py-0.5 rounded
+              ${hide ? "bg-red-100 text-red-800" : "bg-blue-100 text-blue-800"} 
+              `}
+              >
+                {hide ? "비활성화" : "활성화"}
+              </span>
+            </div>
           </div>
         </div>
         <div className="flex gap-2">
