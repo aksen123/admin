@@ -8,7 +8,6 @@ import { ReactSortable, SortableEvent } from "react-sortablejs";
 import useSWR, { mutate } from "swr";
 import AddFoodPopup from "../Components/modal/popup/AddFoodPopup";
 import { foodsService } from "../service/foods";
-import { defaultApi } from "../service/default";
 
 export default function ManagementPage() {
   const { data: foods = [], isLoading } = useSWR("/api/menu", () =>

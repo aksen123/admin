@@ -75,6 +75,7 @@ export interface Login {
 }
 
 export interface User {
+  id: string;
   userId: string;
   auth: string[];
   userPassword: string;

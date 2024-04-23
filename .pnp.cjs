@@ -37,6 +37,7 @@ const RAW_RUNTIME_STATE =
           ["autoprefixer", "virtual:fb8ca4f71c98a47d88cb785f68eba2be86ca8fcf75d7db8bd8a1d3c2ec7a37916f5d17511a7ddd4984eb723004cc2dad0d87343153957c0bc39e23f1924764f9#npm:10.4.17"],\
           ["axios", "npm:1.6.7"],\
           ["babel-eslint", "virtual:fb8ca4f71c98a47d88cb785f68eba2be86ca8fcf75d7db8bd8a1d3c2ec7a37916f5d17511a7ddd4984eb723004cc2dad0d87343153957c0bc39e23f1924764f9#npm:10.1.0"],\
+          ["cookies-next", "npm:4.1.1"],\
           ["dayjs", "npm:1.11.10"],\
           ["eslint", "npm:8.56.0"],\
           ["eslint-config-airbnb", "virtual:fb8ca4f71c98a47d88cb785f68eba2be86ca8fcf75d7db8bd8a1d3c2ec7a37916f5d17511a7ddd4984eb723004cc2dad0d87343153957c0bc39e23f1924764f9#npm:19.0.4"],\
@@ -1784,6 +1785,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@types/cookie", [\
+      ["npm:0.6.0", {\
+        "packageLocation": "../../AppData/Local/Yarn/Berry/cache/@types-cookie-npm-0.6.0-1f4c3f48f0-10c0.zip/node_modules/@types/cookie/",\
+        "packageDependencies": [\
+          ["@types/cookie", "npm:0.6.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@types/emscripten", [\
       ["npm:1.39.10", {\
         "packageLocation": "../../AppData/Local/Yarn/Berry/cache/@types-emscripten-npm-1.39.10-3b81552c03-10c0.zip/node_modules/@types/emscripten/",\
@@ -1831,6 +1841,13 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@types/node", [\
+      ["npm:16.18.96", {\
+        "packageLocation": "../../AppData/Local/Yarn/Berry/cache/@types-node-npm-16.18.96-43ecb971a5-10c0.zip/node_modules/@types/node/",\
+        "packageDependencies": [\
+          ["@types/node", "npm:16.18.96"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
       ["npm:20.11.17", {\
         "packageLocation": "../../AppData/Local/Yarn/Berry/cache/@types-node-npm-20.11.17-5185bfb3de-10c0.zip/node_modules/@types/node/",\
         "packageDependencies": [\
@@ -3161,6 +3178,27 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["cookie", [\
+      ["npm:0.6.0", {\
+        "packageLocation": "../../AppData/Local/Yarn/Berry/cache/cookie-npm-0.6.0-362d6a2e45-10c0.zip/node_modules/cookie/",\
+        "packageDependencies": [\
+          ["cookie", "npm:0.6.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["cookies-next", [\
+      ["npm:4.1.1", {\
+        "packageLocation": "../../AppData/Local/Yarn/Berry/cache/cookies-next-npm-4.1.1-59f12e0396-10c0.zip/node_modules/cookies-next/",\
+        "packageDependencies": [\
+          ["cookies-next", "npm:4.1.1"],\
+          ["@types/cookie", "npm:0.6.0"],\
+          ["@types/node", "npm:16.18.96"],\
+          ["cookie", "npm:0.6.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["core-util-is", [\
       ["npm:1.0.3", {\
         "packageLocation": "../../AppData/Local/Yarn/Berry/cache/core-util-is-npm-1.0.3-ca74b76c90-10c0.zip/node_modules/core-util-is/",\
@@ -3413,6 +3451,7 @@ const RAW_RUNTIME_STATE =
           ["autoprefixer", "virtual:fb8ca4f71c98a47d88cb785f68eba2be86ca8fcf75d7db8bd8a1d3c2ec7a37916f5d17511a7ddd4984eb723004cc2dad0d87343153957c0bc39e23f1924764f9#npm:10.4.17"],\
           ["axios", "npm:1.6.7"],\
           ["babel-eslint", "virtual:fb8ca4f71c98a47d88cb785f68eba2be86ca8fcf75d7db8bd8a1d3c2ec7a37916f5d17511a7ddd4984eb723004cc2dad0d87343153957c0bc39e23f1924764f9#npm:10.1.0"],\
+          ["cookies-next", "npm:4.1.1"],\
           ["dayjs", "npm:1.11.10"],\
           ["eslint", "npm:8.56.0"],\
           ["eslint-config-airbnb", "virtual:fb8ca4f71c98a47d88cb785f68eba2be86ca8fcf75d7db8bd8a1d3c2ec7a37916f5d17511a7ddd4984eb723004cc2dad0d87343153957c0bc39e23f1924764f9#npm:19.0.4"],\

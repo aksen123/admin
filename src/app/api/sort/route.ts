@@ -11,7 +11,6 @@ interface DataType {
 export async function POST(request: NextRequest) {
   const data: DataType = await request.json();
   const store = data.store;
-  console.log(data.foods, store);
   data.foods.forEach((food, i) => {
     const menu = doc(db, store == "SYSTEM" ? "default-menu" : "menu", food.id);
     updateDoc(menu, {
