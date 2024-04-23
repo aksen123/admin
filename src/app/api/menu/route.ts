@@ -24,7 +24,6 @@ export async function GET(request: NextRequest) {
   const store = searchParams.get("store");
   const data = await getData(store);
 
-  console.log(data, store);
   return Response.json({ success: true, data: data });
 }
 
@@ -49,7 +48,6 @@ export async function POST(request: NextRequest) {
   const data: DataType = Object.fromEntries(
     Array.from(formData.entries()).filter((el) => !el.includes("file"))
   );
-
   // // TODO: 이미 등록된 음식인지 체크
   const check = await checkDuplicate(store as string, data.name as string);
   if (!check) {
@@ -105,7 +103,6 @@ export async function PUT(request: NextRequest) {
     hide: data.hide == "true",
   };
   if (!check && data.name !== origin) {
-    console.log("중복!!");
     return Response.json(
       {
         success: false,

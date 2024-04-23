@@ -1,7 +1,13 @@
 import { Login, User } from "@/types/service";
 import { NextRequest } from "next/server";
 import crypto from "crypto";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import {
+  QueryDocumentSnapshot,
+  collection,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 import db from "@/app/service/firebase";
 
 export async function POST(request: NextRequest) {
@@ -25,11 +31,18 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   } else {
-    const user = getUser.docs.map((el) => {
+    const user = getUser.docs.map((el: QueryDocumentSnapshot) => {
       return { id: el.id, ...el.data() };
     })[0] as User;
-    const { store, name, userId, auth, id } = user;
-    const userData = { store, name, userId, auth, id };
-    return Response.json({ success: true, data: userData });
+    const { userPassword, ...userData } = user;
+
+    const encoded = Buffer.from(JSON.stringify(userData), "utf-8").toString(
+      "base64"
+    );
+    const decoded = JSON.parse(
+      Buffer.from(encoded, "base64").toString("utf-8")
+    );
+    console.log(encoded, decoded);
+    return Response.json({ success: true, data: encoded });
   }
 }

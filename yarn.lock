@@ -1086,6 +1086,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/cookie@npm:^0.6.0":
+  version: 0.6.0
+  resolution: "@types/cookie@npm:0.6.0"
+  checksum: 10c0/5b326bd0188120fb32c0be086b141b1481fec9941b76ad537f9110e10d61ee2636beac145463319c71e4be67a17e85b81ca9e13ceb6e3bb63b93d16824d6c149
+  languageName: node
+  linkType: hard
+
 "@types/emscripten@npm:^1.39.6":
   version: 1.39.10
   resolution: "@types/emscripten@npm:1.39.10"
@@ -1129,6 +1136,13 @@ __metadata:
   dependencies:
     undici-types: "npm:~5.26.4"
   checksum: 10c0/1f30dae80b416cbf38f133a619ffb0e9fb9e7bc58f82d900bf73816ae5781740c4640892bf5971dd9c12570d5d05241646be3e7540bb4e059322ec6af4e51e15
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^16.10.2":
+  version: 16.18.96
+  resolution: "@types/node@npm:16.18.96"
+  checksum: 10c0/05ac1c80c8d075086863f7640fd3e75c3912c4ed067bb38bb8fd5377f4e64de7a81d5be3ceae5448dc90d9802a0c7b0d3376538759b91ea652d16cc6dc7de767
   languageName: node
   linkType: hard
 
@@ -2184,6 +2198,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cookie@npm:^0.6.0":
+  version: 0.6.0
+  resolution: "cookie@npm:0.6.0"
+  checksum: 10c0/f2318b31af7a31b4ddb4a678d024514df5e705f9be5909a192d7f116cfb6d45cbacf96a473fa733faa95050e7cff26e7832bb3ef94751592f1387b71c8956686
+  languageName: node
+  linkType: hard
+
+"cookies-next@npm:^4.1.1":
+  version: 4.1.1
+  resolution: "cookies-next@npm:4.1.1"
+  dependencies:
+    "@types/cookie": "npm:^0.6.0"
+    "@types/node": "npm:^16.10.2"
+    cookie: "npm:^0.6.0"
+  checksum: 10c0/6848fdbe2f29ee94194d323a0c7e8d71dddd0628bf2d26da2382854e43f05cae47acea8795cc12f3fbe7e4e679d30c362c6276e3ea0dcf2bf906ebc6f68bbb3b
+  languageName: node
+  linkType: hard
+
 "core-util-is@npm:^1.0.2":
   version: 1.0.3
   resolution: "core-util-is@npm:1.0.3"
@@ -2383,6 +2415,7 @@ __metadata:
     autoprefixer: "npm:^10.0.1"
     axios: "npm:^1.6.7"
     babel-eslint: "npm:^10.1.0"
+    cookies-next: "npm:^4.1.1"
     dayjs: "npm:^1.11.10"
     eslint: "npm:^8"
     eslint-config-airbnb: "npm:^19.0.4"
