@@ -9,12 +9,18 @@ import { enumAdmin } from "@/types/enum";
 import Admin from "./Admin";
 
 const Aside = () => {
-  const user = useRecoilValue(userState);
-  const userCheck = user?.auth.includes(enumAdmin.super);
+  const [token, setToken] = useState<string>("");
+  const pathname = usePathname();
+  // const user = useRecoilValue(userState);
+  // const userCheck = user?.auth.includes(enumAdmin.super);
+
+  useEffect(() => {
+    setToken(getCookie("TOKEN") as string);
+  }, [pathname]);
   return (
-    user && (
+    token && (
       <aside className="w-[30%] max-w-[200px] border-r-2 border-r-gray-300">
-        {userCheck ? <Super /> : <Admin />}
+        <Super />
       </aside>
     )
   );
