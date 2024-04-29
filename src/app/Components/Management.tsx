@@ -18,7 +18,7 @@ export default function Management({ storeCode }: Props) {
     storeCode ? "/api/menu" : null,
     () => foodsService.get(storeCode)
   );
-  const [test, setTest] = useState<Food[]>([]);
+  const [foodsData, setFoodsData] = useState<Food[]>([]);
   const [sortNumber, setSortNumber] = useState(0);
   const [isAddFoodPopup, setIsAddFoodPopup] = useState<boolean>(false);
   const [foodData, setFoodData] = useState<Food | null>(null);
@@ -27,9 +27,18 @@ export default function Management({ storeCode }: Props) {
     setIsAddFoodPopup(true);
   };
 
+  const handleDelete = async (food: Food) => {
+    window.yesNo(food.name, "정말로 삭제 하시겠습니까?", "삭제", async () => {
+      await foodsService.delete(food.id, storeCode).then(() => {
+        alert(`${food.name} 메뉴가 삭제되었습니다.`);
+        mutate("/api/menu");
+      });
+    });
+  };
+
   useEffect(() => {
     if (!isLoading) {
-      setTest(foods);
+      setFoodsData(foods);
       const maxNumber = Math.max(...foods.map((obj) => +obj.sort));
       setSortNumber(maxNumber < 0 ? 0 : maxNumber + 1);
       console.log("maxNumber : ", maxNumber);
@@ -57,6 +66,7 @@ export default function Management({ storeCode }: Props) {
               </th>
               <th className="border-2 border-gray-300 p-2">가격</th>
               <th className="border-2 border-gray-300 p-2">품절</th>
+              <th className="border-2 border-gray-300 p-2">메뉴 활성화</th>
               <th className="w-20 text-center border-2 border-gray-300 p-2">
                 수정
               </th>
@@ -68,20 +78,20 @@ export default function Management({ storeCode }: Props) {
           <ReactSortable
             tag={"tbody"}
             animation={200}
-            list={test}
+            list={foodsData}
             setList={() => {
               console.log("드래그~~~~~");
             }}
             onEnd={async (e: SortableEvent) => {
               console.log("드래그 끝~~");
-              const list = [...test];
+              const list = [...foodsData];
               const obj = list.splice(e.oldIndex as number, 1);
               list.splice(e.newIndex as number, 0, ...obj);
-              setTest(list);
+              setFoodsData(list);
               await foodsService.sort(list, storeCode);
             }}
           >
-            {test.map((food, i) => (
+            {foodsData.map((food, i) => (
               <tr key={food.name + i}>
                 <td className="border-2 border-l-0 border-gray-300 p-2">
                   <Image
@@ -98,7 +108,7 @@ export default function Management({ storeCode }: Props) {
                   <span>{food.name}</span>
                 </td>
                 <td className="border-2 border-gray-300 p-2">
-                  {food.price.toLocaleString()}원
+                  {food.price?.toLocaleString()}원
                 </td>
                 <td className="border-2 border-gray-300">
                   <span
@@ -114,6 +124,20 @@ export default function Management({ storeCode }: Props) {
                     {food.soldOut ? "품절" : "판매가능"}
                   </span>
                 </td>
+                <td className="border-2 border-gray-300">
+                  <span
+                    className={`
+                    ml-2 p-2 text-xs font-medium me-2 px-2.5 py-0.5 rounded
+                    ${
+                      food.hide
+                        ? "bg-red-100 text-red-800"
+                        : "bg-blue-100 text-blue-800"
+                    }
+                 `}
+                  >
+                    {food.hide ? "비활성화" : "활성화"}
+                  </span>
+                </td>
                 <td className="border-2 border-gray-300 p-2 text-center">
                   <button
                     className="text-gray-500 rounded-xl p-2 bg-gray-200 font-semibold "
@@ -126,21 +150,9 @@ export default function Management({ storeCode }: Props) {
                 </td>
                 <td className="border-2 border-r-0 border-gray-300 p-2 text-center">
                   <button
-                    onClick={() =>
-                      window.yesNo(
-                        food.name,
-                        "정말로 삭제 하시겠습니까?",
-                        "삭제",
-                        async () => {
-                          await foodsService
-                            .delete(food.id, storeCode)
-                            .then(() => {
-                              alert(`${food.name} 메뉴가 삭제되었습니다.`);
-                              mutate("/api/menu");
-                            });
-                        }
-                      )
-                    }
+                    onClick={() => {
+                      handleDelete(food);
+                    }}
                     className="text-red-500 rounded-xl p-2 bg-red-200 font-semibold "
                   >
                     삭제

@@ -2,19 +2,17 @@ import {
   getDocs,
   doc,
   setDoc,
-  getDoc,
   updateDoc,
-  deleteDoc,
   query,
   collection,
   where,
-  addDoc,
 } from "firebase/firestore";
 import db, { firebaseApp } from "@/app/service/firebase";
 import { NextRequest } from "next/server";
 import { Food } from "@/types/service";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storeApi } from "@/app/service/store";
+import { EnumAuth } from "@/types/enum";
 interface DataType {
   [k: string]: FormDataEntryValue;
 }
@@ -29,7 +27,7 @@ export async function GET(request: NextRequest) {
 
 const getData = async (store: string | null) => {
   const menus =
-    store == "SYSTEM"
+    store == EnumAuth.super
       ? await getDocs(collection(db, "default-menu"))
       : await getDocs(
           query(collection(db, "menu"), where("store", "==", store))
@@ -91,7 +89,7 @@ export async function PUT(request: NextRequest) {
   console.log("documentID ::", documentID);
   const originMenu = doc(
     db,
-    store == "SYSTEM" ? "default-menu" : "menu",
+    store == EnumAuth.super ? "default-menu" : "menu",
     documentID as string
   );
 
@@ -120,7 +118,7 @@ export async function PUT(request: NextRequest) {
 
   await updateDoc(originMenu, updateData);
 
-  if (store == "SYSTEM") {
+  if (store == EnumAuth.super) {
     const stores = await storeApi.list();
     stores.map((el) => {
       const store = doc(db, "menu", `${el.code}_${documentID}`);
@@ -131,37 +129,29 @@ export async function PUT(request: NextRequest) {
 }
 
 const setMenu = async (data: DataType, store: string | null, url?: string) => {
-  if (store == "SYSTEM") {
+  const addData = {
+    ...data,
+    sort: +data.sort,
+    price: +data.price,
+    src: url ? url : null,
+    soldOut: data.soldOut === "true",
+    hide: data.hide === "true",
+  };
+  if (store == EnumAuth.super) {
     const stores = await storeApi.list();
     const newMenu = doc(collection(db, "default-menu"));
-    await setDoc(newMenu, {
-      ...data,
-      sort: +data.sort,
-      price: +data.price,
-      src: url ? url : null,
-      soldOut: data.soldOut === "true",
-      hide: data.hide === "true",
-      unique: newMenu.id,
-    });
-    const menuData = await (
-      await getDoc(doc(db, "default-menu", newMenu.id))
-    ).data();
+    await setDoc(newMenu, { ...addData, unique: newMenu.id });
     stores.forEach((el) => {
-      setDoc(doc(db, "menu", el + "_" + newMenu.id), {
-        ...menuData,
-        store: el,
+      setDoc(doc(db, "menu", el.code + "_" + newMenu.id), {
+        ...addData,
+        store: el.code,
       });
     });
   } else {
     const newMenu = doc(collection(db, "menu"));
     const documentID = store + `_${newMenu.id}`;
     await setDoc(doc(db, "menu", documentID), {
-      ...data,
-      sort: +data.sort,
-      price: +data.price,
-      soldOut: data.soldOut === "true",
-      hide: data.hide === "true",
-      store: store,
+      ...addData,
       unique: newMenu.id,
     });
   }
@@ -169,7 +159,7 @@ const setMenu = async (data: DataType, store: string | null, url?: string) => {
 
 const checkDuplicate = async (store: string, menu: string) => {
   const check =
-    store == "SYSTEM"
+    store == EnumAuth.super
       ? await getDocs(
           query(collection(db, "default-menu"), where("name", "==", menu))
         )

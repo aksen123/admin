@@ -74,8 +74,8 @@ const Calendar = ({ storeCode }: Props) => {
         .valueOf(),
     };
     const getSales = async () => {
+      console.log(range, storeCode);
       const data = await saleService.getSales(range, storeCode);
-      console.log(data);
       setCalendarArr(data.calendars);
       setMonthTotal(() => {
         return {

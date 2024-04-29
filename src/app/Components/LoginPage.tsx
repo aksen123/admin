@@ -6,9 +6,6 @@ import { loginApi } from "../service/login";
 import { getCookie, setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { useSetRecoilState } from "recoil";
-import { userState } from "../atoms/user-atom";
-import { base64DecodeUtf8 } from "../service/base64";
 
 export default function LoginPage() {
   const { replace } = useRouter();
@@ -21,19 +18,16 @@ export default function LoginPage() {
     defaultValues: { id: "test1", password: "0000" },
   });
 
-  const setUser = useSetRecoilState(userState);
   const onSubmit = async (form: Login) => {
     const token = await loginApi.login(form);
     if (token) {
       setCookie("TOKEN", token);
-      setUser(JSON.parse(base64DecodeUtf8(token)));
       replace("/dashboard");
     }
   };
 
   useEffect(() => {
     const token = getCookie("TOKEN");
-    console.log(token, "로그인페이지");
     token && replace("/dashboard");
   }, []);
 

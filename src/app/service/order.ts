@@ -8,4 +8,7 @@ export const getOrder = {
   get(store: string): Promise<StoreStatus> {
     return api.get(`/api/order/${store}`);
   },
+  getStore(store: string) {
+    return api.get("/api/order", { params: { store } });
+  },
 };

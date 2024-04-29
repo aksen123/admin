@@ -5,6 +5,7 @@ import { NextRequest } from "next/server";
 import { AddStore } from "@/types/service";
 import { storeApi } from "@/app/service/store";
 import { foodsService } from "@/app/service/foods";
+import { EnumAuth } from "@/types/enum";
 
 export async function GET() {
   const storeCollection = await getDocs(collection(db, "stores"));
@@ -36,7 +37,7 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   } else {
-    const menus = (await foodsService.get("SYSTEM")).map(
+    const menus = (await foodsService.get(EnumAuth.super)).map(
       ({ id, ...rest }) => rest
     );
     const maxNumber = Math.max(...stores.map((el) => +el.code));

@@ -11,8 +11,7 @@ export default function Header() {
   const [token, setToken] = useState<string>("");
   const pathname = usePathname();
   const { replace } = useRouter();
-  // const user = useUserInfo();
-  const [user, setUser] = useRecoilState(userState);
+  const user = useUserInfo();
   const handleLogout = () => {
     deleteCookie("TOKEN");
     replace("/");
@@ -22,11 +21,10 @@ export default function Header() {
   useEffect(() => {
     const userToken = getCookie("TOKEN");
     setToken(userToken as string);
-    console.log(user, user);
-    // if (!userToken) {
-    //   replace("/");
-    //   return;
-    // }
+    if (!userToken) {
+      replace("/");
+      return;
+    }
   }, [pathname]);
 
   return (

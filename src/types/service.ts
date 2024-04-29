@@ -23,6 +23,7 @@ export interface Sales {
   order: Menu[];
   store: string;
   total: number;
+  receipt: boolean;
 }
 
 export interface Calendars {
@@ -79,7 +80,7 @@ export interface User {
   userId: string;
   auth: string[];
   userPassword: string;
-  store: number;
+  store: string;
   name: string;
   phone: string;
   birthDate: string;
