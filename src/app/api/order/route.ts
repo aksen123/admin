@@ -1,12 +1,13 @@
-import { NextRequest } from "next/server";
-import { Params } from "../../menu/[slug]/route";
-import dayjs from "dayjs";
-import { Sales, StoreStatus } from "@/types/service";
-import { collection, getDocs, query, where } from "firebase/firestore";
 import db from "@/app/service/firebase";
+import { Sales } from "@/types/service";
+import dayjs from "dayjs";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { NextRequest } from "next/server";
 
-export async function GET(request: NextRequest, context: Params) {
-  const store = context.params.slug;
+export async function GET(req: NextRequest) {
+  const { searchParams } = req.nextUrl;
+  const store = searchParams.get("store");
+  console.log("🚀 ~ GET ~ store:", store);
   const today = dayjs();
   const payments = query(
     collection(db, "payments"),
@@ -15,9 +16,11 @@ export async function GET(request: NextRequest, context: Params) {
     where("store", "==", store)
   );
   const data = (await getDocs(payments)).docs.map((el) => el.data()) as Sales[];
-  const status: StoreStatus = {
+  console.log("🚀 ~ GET ~ data:", data);
+  const todaySales = {
     count: data.length,
     total: data.reduce((prev, curr) => prev + curr.total, 0),
+    sales: data,
   };
-  return Response.json({ success: true, data: status });
+  return Response.json({ success: true, data: todaySales });
 }

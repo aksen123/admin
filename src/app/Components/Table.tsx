@@ -7,14 +7,9 @@ import { StoreInfo } from "@/types/service";
 export default function Table({ code, name }: StoreInfo) {
   const { data } = useSWR([`/api/order`, code], () => getOrder.get(code));
 
-  const router = useRouter();
-  const onClick = () => {
-    router.push(`/store?name=${name}&code=${code}`);
-  };
   return (
     <div
       className="bg-white rounded-xl w-full p-2 flex flex-col justify-start overflow-hidden"
-      onClick={onClick}
     >
       <p className="dashboard text-2xl text-blue-500 font-semibold mb-5 whitespace-nowrap overflow-hidden">
         {name}점

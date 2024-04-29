@@ -43,7 +43,6 @@ export async function GET(req: NextRequest) {
 
   const prevTotal = prevData.reduce((acc, curr) => acc + curr.total, 0);
 
-  console.log(start, end, store, data, " ::: sales api :::");
   const calendars: Calendars[] = [];
   let MonthTotal = 0;
 

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 
 interface ModalProps {
@@ -9,7 +9,11 @@ interface ModalProps {
 }
 
 const Modal = ({ open, onClose, children }: ModalProps) => {
-  const root = document.querySelector("#modal");
+  const [root, setRoot] = useState<Element | null>(null);
+  useEffect(() => {
+    const root = document.querySelector("#modal");
+    setRoot(root);
+  }, []);
 
   if (!open) return null;
   return (
