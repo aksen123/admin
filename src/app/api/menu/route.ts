@@ -145,6 +145,7 @@ const setMenu = async (data: DataType, store: string | null, url?: string) => {
       setDoc(doc(db, "menu", el.code + "_" + newMenu.id), {
         ...addData,
         store: el.code,
+        unique: newMenu.id,
       });
     });
   } else {
