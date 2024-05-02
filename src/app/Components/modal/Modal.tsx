@@ -12,8 +12,8 @@ const Modal = ({ open, onClose, children }: ModalProps) => {
   const [root, setRoot] = useState<Element | null>(null);
   useEffect(() => {
     const root = document.querySelector("#modal");
-    setRoot(root);
-  }, []);
+    root && setRoot(root);
+  }, [open]);
 
   if (!open) return null;
   return (
