@@ -13,7 +13,11 @@ export async function DELETE(request: NextRequest, context: Params) {
   const { searchParams } = request.nextUrl;
   const store = searchParams.get("store");
   const { slug } = context.params;
-  const menuDoc = doc(db, store == EnumAuth.super? "default-menu" : "menu", slug);
+  const menuDoc = doc(
+    db,
+    store === EnumAuth.super ? "default-menu" : "menu",
+    slug
+  );
   const food = await getDoc(menuDoc);
   if (!food) {
     return Response.json(

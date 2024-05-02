@@ -26,6 +26,7 @@ const RAW_RUNTIME_STATE =
       [null, {\
         "packageLocation": "./",\
         "packageDependencies": [\
+          ["@next/eslint-plugin-next", "npm:14.2.3"],\
           ["@types/node", "npm:20.11.17"],\
           ["@types/react", "npm:18.2.55"],\
           ["@types/react-dom", "npm:18.2.19"],\
@@ -1492,6 +1493,14 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../AppData/Local/Yarn/Berry/cache/@next-eslint-plugin-next-npm-14.1.0-9cacf84bd9-10c0.zip/node_modules/@next/eslint-plugin-next/",\
         "packageDependencies": [\
           ["@next/eslint-plugin-next", "npm:14.1.0"],\
+          ["glob", "npm:10.3.10"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:14.2.3", {\
+        "packageLocation": "../../AppData/Local/Yarn/Berry/cache/@next-eslint-plugin-next-npm-14.2.3-22dfe5fe9e-10c0.zip/node_modules/@next/eslint-plugin-next/",\
+        "packageDependencies": [\
+          ["@next/eslint-plugin-next", "npm:14.2.3"],\
           ["glob", "npm:10.3.10"]\
         ],\
         "linkType": "HARD"\
@@ -3440,6 +3449,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./",\
         "packageDependencies": [\
           ["dumpling-admin", "workspace:."],\
+          ["@next/eslint-plugin-next", "npm:14.2.3"],\
           ["@types/node", "npm:20.11.17"],\
           ["@types/react", "npm:18.2.55"],\
           ["@types/react-dom", "npm:18.2.19"],\

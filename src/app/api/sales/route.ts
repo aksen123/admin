@@ -1,5 +1,5 @@
 import db from "@/app/service/firebase";
-import { Calendars, Menu, Sales } from "@/types/service";
+import { Calendars, Sales } from "@/types/service";
 import dayjs from "dayjs";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { NextRequest } from "next/server";
@@ -33,11 +33,11 @@ export async function GET(req: NextRequest) {
   const getPrevPayment = await getDocs(prevPayments);
   const getPayment = await getDocs(payments);
 
-  let prevData = getPrevPayment.docs.map((doc) => ({
+  const prevData = getPrevPayment.docs.map((doc) => ({
     ...doc.data(),
   })) as Sales[];
 
-  let data = getPayment.docs.map((doc) => ({
+  const data = getPayment.docs.map((doc) => ({
     ...doc.data(),
   })) as Sales[];
 
@@ -88,11 +88,11 @@ const percentage = (curr: number, prev: number) => {
 
   const percent = (subtract / prev) * 100;
 
-  if (percent == Infinity) {
+  if (percent === Infinity) {
     return 100;
-  } else if (isNaN(percent)) {
-    return 0;
-  } else {
-    return percent.toFixed(1);
   }
+  if (isNaN(percent)) {
+    return 0;
+  }
+  return percent.toFixed(1);
 };

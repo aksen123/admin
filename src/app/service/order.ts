@@ -1,4 +1,4 @@
-import { Menu, StoreStatus, BoardStatus, PostPayment } from "@/types/service";
+import { StoreStatus, BoardStatus, PostPayment } from "@/types/service";
 import api from "./axios";
 
 export const getOrder = {

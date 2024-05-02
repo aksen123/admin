@@ -1,5 +1,6 @@
 import api, { apiFile } from "./axios";
 import { Food } from "@/types/service";
+
 export const foodsService = {
   get(store: string | null): Promise<Food[]> {
     return api.get("/api/menu", { params: { store } });

@@ -1,6 +1,5 @@
 "user client";
 
-import useUserInfo from "@/app/hooks/useUserInfo";
 import { getOrder } from "@/app/service/order";
 import { ViewBoard } from "@/types/enum";
 import React, { useState } from "react";
@@ -8,11 +7,9 @@ import useSWR from "swr";
 import Card from "./Card";
 
 export default function Admin({ store }: { store: string }) {
-  const user = useUserInfo()?.store as string;
   const { data } = useSWR(store ? `/api/order` : null, () =>
     getOrder.getStore(store)
   );
-  console.log(store, data);
   const [view, setView] = useState<string>("wait");
 
   const onClick = (text: string) => {

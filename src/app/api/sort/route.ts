@@ -3,18 +3,19 @@ import { Food } from "@/types/service";
 import db from "@/app/service/firebase";
 import { doc, updateDoc } from "firebase/firestore";
 import { EnumAuth } from "@/types/enum";
+
 interface DataType {
   foods: Food[];
   store: string;
 }
 
 export async function POST(request: NextRequest) {
-  const data: DataType = await request.json();
-  const store = data.store;
+  const data = (await request.json()) as DataType;
+  const { store } = data;
   data.foods.forEach((food, i) => {
     const menu = doc(
       db,
-      store == EnumAuth.super ? "default-menu" : "menu",
+      store === EnumAuth.super ? "default-menu" : "menu",
       food.id
     );
     updateDoc(menu, {

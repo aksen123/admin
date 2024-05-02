@@ -1,9 +1,7 @@
 "use client";
 
 import useSWR from "swr";
-import { useEffect } from "react";
 import { storeApi } from "@/app/service/store";
-import useUserInfo from "@/app/hooks/useUserInfo";
 import Table from "../Table";
 
 export default function Super() {

@@ -1,6 +1,6 @@
 "use client";
 
-import { Calendars, GetSaleDetail, Menu, Range } from "@/types/service";
+import { Calendars, GetSaleDetail, Range } from "@/types/service";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import {
@@ -11,7 +11,6 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { MonthTotal, calendarState } from "../atoms/calendar-atom";
 import { saleService } from "../service/sales";
 import NoSales from "./animations/NoSales";
-import { useSearchParams } from "next/navigation";
 
 interface Props {
   storeCode: string | null;
@@ -26,7 +25,7 @@ const Calendar = ({ storeCode }: Props) => {
     dayjs().format("YYYY-MM-DD")
   );
 
-  const todayCheck = (date: string): Boolean => {
+  const todayCheck = (date: string): boolean => {
     return pickDate === date;
   };
 
@@ -58,7 +57,6 @@ const Calendar = ({ storeCode }: Props) => {
 
     const detail = await saleService.getSalesDetail(range, storeCode);
     setSaleDetail(detail);
-    console.log(detail);
   };
 
   useEffect(() => {
@@ -70,11 +68,10 @@ const Calendar = ({ storeCode }: Props) => {
       start: current.subtract(monthFirst, "day").valueOf(),
       end: current
         .endOf("month")
-        .add(blank == 7 ? 0 : blank, "day")
+        .add(blank === 7 ? 0 : blank, "day")
         .valueOf(),
     };
     const getSales = async () => {
-      console.log(range, storeCode);
       const data = await saleService.getSales(range, storeCode);
       setCalendarArr(data.calendars);
       setMonthTotal(() => {
@@ -147,7 +144,7 @@ const Calendar = ({ storeCode }: Props) => {
                   >
                     <p
                       className={`relative mb-3 text-lg p-2 w-full h-10 text-left leading-6 ${
-                        i % 7 == 0 ? "text-red-600 " : null
+                        i % 7 === 0 ? "text-red-600 " : null
                       } ${i % 7 === 6 ? "text-blue-600 " : null} ${
                         todayCheck(el.format) ? `text-white` : null
                       }`}
@@ -187,12 +184,6 @@ const Calendar = ({ storeCode }: Props) => {
         ) : (
           <>
             <table className="w-full">
-              <thead>
-                <tr>
-                  <th className="w-1/2"></th>
-                  <th className="w-1/2"></th>
-                </tr>
-              </thead>
               <tbody className="">
                 <tr className="border-y-2 border-y-gray-200">
                   <td className="p-2 bg-blue-600 border-r-2 border-r-gray-200 text-white">

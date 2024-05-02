@@ -9,10 +9,10 @@ import {
 } from "firebase/firestore";
 import db, { firebaseApp } from "@/app/service/firebase";
 import { NextRequest } from "next/server";
-import { Food } from "@/types/service";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storeApi } from "@/app/service/store";
 import { EnumAuth } from "@/types/enum";
+
 interface DataType {
   [k: string]: FormDataEntryValue;
 }
@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
 
 const getData = async (store: string | null) => {
   const menus =
-    store == EnumAuth.super
+    store === EnumAuth.super
       ? await getDocs(collection(db, "default-menu"))
       : await getDocs(
           query(collection(db, "menu"), where("store", "==", store))
@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  if (typeof file != "string") {
+  if (typeof file !== "string") {
     const storageRef = ref(firebaseApp, `menu/${file.name}`);
     uploadBytes(storageRef, file as File).then((snapshot) => {
       getDownloadURL(snapshot.ref).then((url) => {
@@ -66,10 +66,10 @@ export async function POST(request: NextRequest) {
       });
     });
     return Response.json({ success: true });
-  } else {
-    await setMenu(data, store);
-    return Response.json({ success: true });
   }
+
+  await setMenu(data, store);
+  return Response.json({ success: true });
 }
 
 export async function PUT(request: NextRequest) {
@@ -86,19 +86,18 @@ export async function PUT(request: NextRequest) {
     )
   );
   const check = await checkDuplicate(store as string, data.name as string);
-  console.log("documentID ::", documentID);
   const originMenu = doc(
     db,
-    store == EnumAuth.super ? "default-menu" : "menu",
+    store === EnumAuth.super ? "default-menu" : "menu",
     documentID as string
   );
 
-  let updateData: { [key: string]: any } = {
+  const updateData = {
     ...data,
     price: +data.price,
     sort: +data.sort,
-    soldOut: data.soldOut == "true",
-    hide: data.hide == "true",
+    soldOut: data.soldOut === "true",
+    hide: data.hide === "true",
   };
   if (!check && data.name !== origin) {
     return Response.json(
@@ -109,16 +108,14 @@ export async function PUT(request: NextRequest) {
       { status: 500 }
     );
   }
-  if (typeof file != "string") {
+  if (typeof file !== "string") {
     const storageRef = ref(firebaseApp, `menu/${file.name}`);
     const snapshot = await uploadBytes(storageRef, file as File);
     const imgUrl = await getDownloadURL(snapshot.ref);
-    updateData.src = imgUrl;
+    await updateDoc(originMenu, { ...updateData, src: imgUrl });
   }
 
-  await updateDoc(originMenu, updateData);
-
-  if (store == EnumAuth.super) {
+  if (store === EnumAuth.super) {
     const stores = await storeApi.list();
     stores.map((el) => {
       const store = doc(db, "menu", `${el.code}_${documentID}`);
@@ -137,12 +134,12 @@ const setMenu = async (data: DataType, store: string | null, url?: string) => {
     soldOut: data.soldOut === "true",
     hide: data.hide === "true",
   };
-  if (store == EnumAuth.super) {
+  if (store === EnumAuth.super) {
     const stores = await storeApi.list();
     const newMenu = doc(collection(db, "default-menu"));
     await setDoc(newMenu, { ...addData, unique: newMenu.id });
     stores.forEach((el) => {
-      setDoc(doc(db, "menu", el.code + "_" + newMenu.id), {
+      setDoc(doc(db, "menu", `${el.code}_${newMenu.id}`), {
         ...addData,
         store: el.code,
         unique: newMenu.id,
@@ -150,7 +147,7 @@ const setMenu = async (data: DataType, store: string | null, url?: string) => {
     });
   } else {
     const newMenu = doc(collection(db, "menu"));
-    const documentID = store + `_${newMenu.id}`;
+    const documentID = `${store}_${newMenu.id}`;
     await setDoc(doc(db, "menu", documentID), {
       ...addData,
       unique: newMenu.id,
@@ -160,7 +157,7 @@ const setMenu = async (data: DataType, store: string | null, url?: string) => {
 
 const checkDuplicate = async (store: string, menu: string) => {
   const check =
-    store == EnumAuth.super
+    store === EnumAuth.super
       ? await getDocs(
           query(collection(db, "default-menu"), where("name", "==", menu))
         )

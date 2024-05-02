@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import db from "@/app/service/firebase";
 import { addDoc, collection, doc, getDocs, setDoc } from "firebase/firestore";
 import crypto from "crypto";
@@ -28,7 +29,7 @@ export async function POST(request: NextRequest) {
     userId,
   } = formData;
   const stores = await storeApi.list();
-  if (stores.find((el) => el.name == formData.storeName)) {
+  if (stores.find((el) => el.name === formData.storeName)) {
     return Response.json(
       {
         success: false,
@@ -36,40 +37,40 @@ export async function POST(request: NextRequest) {
       },
       { status: 500 }
     );
-  } else {
-    const menus = (await foodsService.get(EnumAuth.super)).map(
-      ({ id, ...rest }) => rest
-    );
-    const maxNumber = Math.max(...stores.map((el) => +el.code));
-    const newCode = maxNumber < 0 ? 1 + "" : maxNumber + 1 + "";
-    const password = crypto
-      .createHash("sha256")
-      .update(userPassword)
-      .digest("hex");
-    const storeInfo = {
-      name: storeName,
-      license: taxId,
-      store: newCode,
-      address,
-      phone,
-    };
-    const userInfo = {
-      birthDate,
-      name,
-      userId,
-      phone,
-      userPassword: password,
-      store: newCode,
-      auth: ["ADMIN"],
-    };
-    menus.map((menu) =>
-      setDoc(doc(db, "menu", newCode + "_" + menu.unique), {
-        ...menu,
-        store: newCode,
-      })
-    );
-    await setDoc(doc(db, "stores", newCode + ""), storeInfo);
-    await addDoc(collection(db, "users"), userInfo);
   }
+
+  const menus = (await foodsService.get(EnumAuth.super)).map(
+    ({ id, ...rest }) => rest
+  );
+  const maxNumber = Math.max(...stores.map((el) => +el.code));
+  const newCode = maxNumber < 0 ? "1" : `${maxNumber + 1}`;
+  const password = crypto
+    .createHash("sha256")
+    .update(userPassword)
+    .digest("hex");
+  const storeInfo = {
+    name: storeName,
+    license: taxId,
+    store: newCode,
+    address,
+    phone,
+  };
+  const userInfo = {
+    birthDate,
+    name,
+    userId,
+    phone,
+    userPassword: password,
+    store: newCode,
+    auth: ["ADMIN"],
+  };
+  menus.map((menu) =>
+    setDoc(doc(db, "menu", `${newCode}_${menu.unique}`), {
+      ...menu,
+      store: newCode,
+    })
+  );
+  await setDoc(doc(db, "stores", newCode), storeInfo);
+  await addDoc(collection(db, "users"), userInfo);
   return Response.json({ success: true });
 }

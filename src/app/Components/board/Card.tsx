@@ -4,6 +4,7 @@ import { Sales } from "@/types/service";
 import dayjs from "dayjs";
 import React from "react";
 import { mutate } from "swr";
+
 interface CardProps {
   sales: Sales[];
   view: string;

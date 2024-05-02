@@ -1,8 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { FcSalesPerformance } from "react-icons/fc";
-import { FcAddDatabase } from "react-icons/fc";
-import { FcServices } from "react-icons/fc";
+import { FcAddDatabase, FcSalesPerformance, FcServices } from "react-icons/fc";
 import useSWR from "swr";
 import { storeApi } from "@/app/service/store";
 import { FaStore } from "react-icons/fa";
@@ -16,7 +14,7 @@ export default function Super() {
         <li>
           <Link
             className="group flex items-center gap-2 w-fit"
-            href={"/dashboard"}
+            href="/dashboard"
           >
             <FcSalesPerformance />
             <span className=" duration-300 group-hover:text-blue-600 group-hover:font-semibold">
@@ -27,7 +25,7 @@ export default function Super() {
         <li>
           <Link
             className="group flex items-center gap-2 w-fit"
-            href={"/addStore"}
+            href="/addStore"
           >
             <FcAddDatabase />
             <span className=" duration-300 group-hover:text-blue-600 group-hover:font-semibold">
@@ -38,7 +36,7 @@ export default function Super() {
         <li>
           <Link
             className="group flex items-center gap-2 w-fit"
-            href={"/management"}
+            href="/management"
           >
             <FcServices />
             <span className=" duration-300 group-hover:text-blue-600 group-hover:font-semibold">

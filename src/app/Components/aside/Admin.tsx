@@ -9,7 +9,7 @@ export default function Admin() {
         <li>
           <Link
             className="group flex items-center gap-2 w-fit"
-            href={"/dashboard"}
+            href="/dashboard"
           >
             <FcSalesPerformance />
             <span className=" duration-300 group-hover:text-blue-600 group-hover:font-semibold">
@@ -18,7 +18,7 @@ export default function Admin() {
           </Link>
         </li>
         <li>
-          <Link className="group flex items-center gap-2 w-fit" href={"/sales"}>
+          <Link className="group flex items-center gap-2 w-fit" href="/sales">
             <FcCalendar />
             <span className=" duration-300 group-hover:text-blue-600 group-hover:font-semibold">
               매출달력
@@ -28,7 +28,7 @@ export default function Admin() {
         <li>
           <Link
             className="group flex items-center gap-2 w-fit"
-            href={"/management"}
+            href="/management"
           >
             <FcServices />
             <span className=" duration-300 group-hover:text-blue-600 group-hover:font-semibold">

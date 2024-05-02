@@ -8,7 +8,7 @@ export interface Food {
   count: number;
   soldOut: boolean;
   hide: boolean;
-  file?: File | any;
+  file?: File | string;
 }
 
 export interface Menu {

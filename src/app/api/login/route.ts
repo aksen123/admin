@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Login, User } from "@/types/service";
 import { NextRequest } from "next/server";
 import crypto from "crypto";
@@ -30,19 +31,15 @@ export async function POST(request: NextRequest) {
       },
       { status: 500 }
     );
-  } else {
-    const user = getUser.docs.map((el: QueryDocumentSnapshot) => {
-      return { id: el.id, ...el.data() };
-    })[0] as User;
-    const { userPassword, ...userData } = user;
-
-    const encoded = Buffer.from(JSON.stringify(userData), "utf-8").toString(
-      "base64"
-    );
-    const decoded = JSON.parse(
-      Buffer.from(encoded, "base64").toString("utf-8")
-    );
-    console.log(encoded, decoded);
-    return Response.json({ success: true, data: encoded });
   }
+
+  const user = getUser.docs.map((el: QueryDocumentSnapshot) => {
+    return { id: el.id, ...el.data() };
+  })[0] as User;
+  const { userPassword, ...userData } = user;
+
+  const encoded = Buffer.from(JSON.stringify(userData), "utf-8").toString(
+    "base64"
+  );
+  return Response.json({ success: true, data: encoded });
 }

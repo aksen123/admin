@@ -12,7 +12,7 @@ export default function ManagementPage() {
 
   return (
     <article className="w-full p-8">
-      <Management storeCode={code} />
+      {user && <Management storeCode={code} />}
     </article>
   );
 }

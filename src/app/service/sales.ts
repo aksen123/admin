@@ -1,4 +1,4 @@
-import { GetPayment, Range, Sales, GetSaleDetail } from "@/types/service";
+import { GetPayment, Range, GetSaleDetail } from "@/types/service";
 import api from "./axios";
 
 export const saleService = {

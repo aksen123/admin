@@ -75,11 +75,9 @@ export default function Management({ storeCode }: Props) {
             </tr>
           </thead>
           <ReactSortable
-            tag={"tbody"}
+            tag="tbody"
             animation={200}
             list={foodsData}
-            setList={() => {
-            }}
             onEnd={async (e: SortableEvent) => {
               const list = [...foodsData];
               const obj = list.splice(e.oldIndex as number, 1);

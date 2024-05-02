@@ -37,11 +37,11 @@ export default function AddFoodPopup({
   const onSubmit = async (formFood: Food) => {
     const formData = new FormData();
     for (const [key, value] of Object.entries(formFood)) {
-      key == "file"
+      key === "file"
         ? formData.append(key, value[0])
         : formData.append(key, value);
     }
-    formData.append("sort", food ? food.sort + "" : sort + "");
+    formData.append("sort", food ? `${food.sort}` : `${sort}`);
     foodSrc && formData.append("src", foodSrc);
     food && formData.append("id", food?.id);
     food && formData.append("origin", food.name);
@@ -65,7 +65,7 @@ export default function AddFoodPopup({
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let selectedImage = e.target.files && e.target.files[0];
+    const selectedImage = e.target.files && e.target.files[0];
     if (selectedImage) {
       const maxSize = 5 * 1024 * 1024;
       if (selectedImage.size > maxSize) {

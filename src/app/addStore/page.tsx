@@ -4,13 +4,9 @@ import { useForm } from "react-hook-form";
 import { storeApi } from "../service/store";
 import { AddStore } from "@/types/service";
 
-interface Test {}
-
 export default function page() {
   const {
     register,
-    setFocus,
-    setValue,
     handleSubmit,
     setError,
     formState: { errors },
@@ -20,7 +16,6 @@ export default function page() {
   });
   const onSubmit = async (formData: AddStore) => {
     const koreaRegex = /^[가-힣]+$/;
-    const engRegex = /^[a-zA-Z]+$/;
     let addStore = true;
     if (!koreaRegex.test(formData.name)) {
       setError(
@@ -39,7 +34,7 @@ export default function page() {
       addStore = false;
     }
 
-    if (formData.phone.slice(0, 3) != "010" || formData.phone.length < 11) {
+    if (formData.phone.slice(0, 3) !== "010" || formData.phone.length < 11) {
       setError(
         "phone",
         { message: "핸드폰 번호를 정확히 입력해 주세요" },

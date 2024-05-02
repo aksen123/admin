@@ -4,13 +4,13 @@ export function base64DecodeUtf8(base64: string) {
 
   // UTF-16 문자열로 변환
   const codeUnits = new Uint16Array(binaryString.length);
-  for (let i = 0; i < binaryString.length; i++) {
+  for (let i = 0; i < binaryString.length; i += 1) {
     codeUnits[i] = binaryString.charCodeAt(i);
   }
 
   // decodeURIComponent와 encodeURIComponent를 사용하여 UTF-8 문자열로 변환
   const uriComponent = Array.from(codeUnits)
-    .map((byte) => "%" + ("00" + byte.toString(16)).slice(-2))
+    .map((byte) => `%00${byte.toString(16).slice(-2)}`)
     .join("");
   return decodeURIComponent(uriComponent);
 }

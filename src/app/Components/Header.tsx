@@ -1,11 +1,10 @@
 "use client";
+
 import { deleteCookie, getCookie } from "cookies-next";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { GiDumplingBao } from "react-icons/gi";
 import useUserInfo from "../hooks/useUserInfo";
-import { useRecoilState } from "recoil";
-import { userState } from "../atoms/user-atom";
 
 export default function Header() {
   const [token, setToken] = useState<string>("");
@@ -15,7 +14,6 @@ export default function Header() {
   const handleLogout = () => {
     deleteCookie("TOKEN");
     replace("/");
-    // setUser(null);
   };
 
   useEffect(() => {

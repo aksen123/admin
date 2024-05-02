@@ -1,5 +1,5 @@
 import api from "./axios";
-import { Login, User } from "@/types/service";
+import { Login } from "@/types/service";
 
 export const loginApi = {
   login(data: Login): Promise<string> {

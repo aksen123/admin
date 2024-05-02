@@ -1,5 +1,5 @@
 import db from "@/app/service/firebase";
-import { Menu, Sales } from "@/types/service";
+import { Sales } from "@/types/service";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { NextRequest } from "next/server";
 
@@ -17,12 +17,12 @@ export async function GET(request: NextRequest) {
   );
 
   const getPayment = await getDocs(payments);
-  let data = getPayment.docs.map((doc) => ({
+  const data = getPayment.docs.map((doc) => ({
     id: doc.id,
     ...doc.data(),
   })) as Sales[];
 
-  let dateTotal = data.reduce((prev, curr) => prev + curr.total, 0);
+  const dateTotal = data.reduce((prev, curr) => prev + curr.total, 0);
 
   return Response.json({
     success: true,

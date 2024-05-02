@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@next/eslint-plugin-next": "^14.2.3",
     "axios": "^1.6.7",
     "cookies-next": "^4.1.1",
     "dayjs": "^1.11.10",
