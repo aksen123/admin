@@ -9,8 +9,6 @@ export async function GET(request: NextRequest) {
   const end = searchParams.get("end");
   const store = searchParams.get("store");
 
-  console.log(start, end, store);
-
   const payments = query(
     collection(db, "payments"),
     where("date", ">=", start && +start),
@@ -20,6 +18,7 @@ export async function GET(request: NextRequest) {
 
   const getPayment = await getDocs(payments);
   let data = getPayment.docs.map((doc) => ({
+    id: doc.id,
     ...doc.data(),
   })) as Sales[];
 

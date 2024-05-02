@@ -10,7 +10,7 @@ export default function page() {
   const check = user?.auth.includes(EnumAuth.super);
   const store = user && user.store;
   return (
-    <article className="w-full">
+    <article className="w-full p-8">
       {check ? <Super /> : <Admin store={store as string} />}
     </article>
   );

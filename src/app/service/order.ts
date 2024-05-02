@@ -1,14 +1,14 @@
-import { Menu, StoreStatus } from "@/types/service";
+import { Menu, StoreStatus, BoardStatus, PostPayment } from "@/types/service";
 import api from "./axios";
 
-interface GetOrders extends Menu {
-  id: string;
-}
 export const getOrder = {
   get(store: string): Promise<StoreStatus> {
     return api.get(`/api/order/${store}`);
   },
-  getStore(store: string) {
+  getStore(store: string): Promise<BoardStatus> {
     return api.get("/api/order", { params: { store } });
+  },
+  post(data: PostPayment) {
+    return api.post("/api/order", data);
   },
 };

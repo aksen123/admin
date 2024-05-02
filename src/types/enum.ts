@@ -7,3 +7,8 @@ export const enum EnumAuth {
   super = "SUPER",
   admin = "ADMIN",
 }
+export enum ViewBoard {
+  wait = "wait",
+  receipt = "receipt",
+  complete = "complete",
+}

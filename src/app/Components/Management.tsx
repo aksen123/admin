@@ -41,7 +41,6 @@ export default function Management({ storeCode }: Props) {
       setFoodsData(foods);
       const maxNumber = Math.max(...foods.map((obj) => +obj.sort));
       setSortNumber(maxNumber < 0 ? 0 : maxNumber + 1);
-      console.log("maxNumber : ", maxNumber);
     }
   }, [foods]);
 
@@ -80,10 +79,8 @@ export default function Management({ storeCode }: Props) {
             animation={200}
             list={foodsData}
             setList={() => {
-              console.log("드래그~~~~~");
             }}
             onEnd={async (e: SortableEvent) => {
-              console.log("드래그 끝~~");
               const list = [...foodsData];
               const obj = list.splice(e.oldIndex as number, 1);
               list.splice(e.newIndex as number, 0, ...obj);

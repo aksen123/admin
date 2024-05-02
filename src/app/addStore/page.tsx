@@ -19,7 +19,6 @@ export default function page() {
     defaultValues: {},
   });
   const onSubmit = async (formData: AddStore) => {
-    console.log(formData, "::: data");
     const koreaRegex = /^[가-힣]+$/;
     const engRegex = /^[a-zA-Z]+$/;
     let addStore = true;

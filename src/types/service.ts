@@ -18,12 +18,13 @@ export interface Menu {
 }
 
 export interface Sales {
-  id?: string;
+  id: string;
   date: number;
   order: Menu[];
   store: string;
   total: number;
   receipt: boolean;
+  complete: boolean;
 }
 
 export interface Calendars {
@@ -53,6 +54,11 @@ export interface Range {
 export interface StoreStatus {
   count: number;
   total: number;
+}
+export interface BoardStatus extends StoreStatus {
+  wait: Sales[];
+  receipt: Sales[];
+  complete: Sales[];
 }
 export interface StoreInfo {
   code: string;
@@ -84,4 +90,9 @@ export interface User {
   name: string;
   phone: string;
   birthDate: string;
+}
+
+export interface PostPayment {
+  id: string;
+  view: string;
 }

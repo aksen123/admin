@@ -5,6 +5,7 @@ import { FcAddDatabase } from "react-icons/fc";
 import { FcServices } from "react-icons/fc";
 import useSWR from "swr";
 import { storeApi } from "@/app/service/store";
+import { FaStore } from "react-icons/fa";
 
 export default function Super() {
   const { data } = useSWR("/api/store", () => storeApi.list());
@@ -53,7 +54,7 @@ export default function Super() {
               className="group flex items-center gap-2 w-fit"
               href={`/store?name=${store.name}&code=${store.code}`}
             >
-              <FcServices />
+              <FaStore color="blue" />
               <span className=" duration-300 group-hover:text-blue-600 group-hover:font-semibold">
                 {store.name}점
               </span>
