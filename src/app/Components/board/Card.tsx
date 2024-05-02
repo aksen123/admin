@@ -17,17 +17,17 @@ export default function Card({ sales, view }: CardProps) {
     mutate("/api/order");
   };
   return (
-    <div className="w-full grid grid-cols-4 justify-center items-start gap-8 p-8">
+    <div className="w-full grid grid-cols-4 justify-center items-start gap-x-8 gap-y-8 p-8 bg-white rounded-b-2xl min-h-screen h-fit">
       {sales.map((sale) => (
         <div
           key={sale.id}
-          className="bg-white min-h-48 h-fit flex flex-col rounded-2xl"
+          className="min-h-48 h-fit flex flex-col rounded-2xl shadow-lg shadow-orange-200"
         >
-          <div className="bg-orange-400 rounded-t-2xl p-2 font-semibold text-white flex justify-between">
+          <div className="bg-orange-400 rounded-t-2xl p-2 px-4 font-semibold text-white flex justify-between">
             <span>{sale.id}</span>
             <span>{dayjs(sale.date).format("HH:mm")}</span>
           </div>
-          <div className="flex-1 border-b-[1px] border-gray-400 p-2">
+          <div className="flex-1 border-b-[1px] border-b-gray-400 border-x-2 border-x-orange-400 p-2 px-4">
             {sale.order.map((order, i) => (
               <div key={order.name + i} className="flex justify-between">
                 <span>{order.name}</span>
@@ -39,7 +39,7 @@ export default function Card({ sales, view }: CardProps) {
             onClick={() => {
               view !== ViewBoard.complete ? onClick(sale.id) : false;
             }}
-            className="flex justify-between p-2 hover:bg-slate-400 hover:text-white active:text-white  active:bg-slate-500 rounded-b-2xl"
+            className="flex justify-between p-2 px-4 hover:bg-orange-400 hover:text-white active:text-white  active:bg-orange-500 rounded-b-2xl border-2 border-t-0 border-orange-400"
           >
             {view !== ViewBoard.complete ? (
               <span>{view === ViewBoard.wait ? "접수" : "완료"}</span>

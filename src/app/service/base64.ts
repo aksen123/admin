@@ -10,7 +10,7 @@ export function base64DecodeUtf8(base64: string) {
 
   // decodeURIComponent와 encodeURIComponent를 사용하여 UTF-8 문자열로 변환
   const uriComponent = Array.from(codeUnits)
-    .map((byte) => `%00${byte.toString(16).slice(-2)}`)
+    .map((byte) => `%${"00".concat(byte.toString(16)).slice(-2)}`)
     .join("");
   return decodeURIComponent(uriComponent);
 }

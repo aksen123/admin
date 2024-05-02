@@ -186,13 +186,13 @@ const Calendar = ({ storeCode }: Props) => {
             <table className="w-full">
               <tbody className="">
                 <tr className="border-y-2 border-y-gray-200">
-                  <td className="p-2 bg-blue-600 border-r-2 border-r-gray-200 text-white">
+                  <td className="p-2 bg-blue-600 w-1/2 border-r-2 border-r-gray-200 text-white">
                     결제 건수
                   </td>
                   <td className="p-2 ">{saleDetail?.count}건</td>
                 </tr>
                 <tr className="border-y-2 border-y-gray-200">
-                  <td className="p-2 bg-blue-600 border-r-2 border-r-gray-200 text-white">
+                  <td className="p-2 bg-blue-600 w-1/2 border-r-2 border-r-gray-200 text-white">
                     결제 금액
                   </td>
                   <td className="p-2 ">
@@ -200,7 +200,7 @@ const Calendar = ({ storeCode }: Props) => {
                   </td>
                 </tr>
                 <tr className="border-y-2 border-y-gray-200">
-                  <td className="p-2 bg-blue-600 border-r-2 border-r-gray-200 text-white">
+                  <td className="p-2 bg-blue-600 w-1/2 border-r-2 border-r-gray-200 text-white">
                     총 매출 금액
                   </td>
                   <td className="p-2 ">
@@ -236,7 +236,7 @@ const Calendar = ({ storeCode }: Props) => {
                       );
                     })}
                   </p>
-                  <p className="w-full p-2">
+                  <p className="w-full p-2 text-left">
                     결제 금액 : {sale.total.toLocaleString()}원
                   </p>
                 </div>
