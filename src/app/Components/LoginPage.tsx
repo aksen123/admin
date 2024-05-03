@@ -56,7 +56,7 @@ export default function LoginPage() {
           <p className="text-red-600">{errors.password?.message}</p>
           <button
             type="submit"
-            className="bg-blue-600 text-white text-center text-lg font-medium rounded-xl p-2 mt-2"
+            className="bg-blue-600 hover:bg-blue-500 text-white text-center text-lg font-medium rounded-xl p-2 mt-2"
           >
             로그인
           </button>
