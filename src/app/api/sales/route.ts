@@ -41,7 +41,10 @@ export async function GET(req: NextRequest) {
     ...doc.data(),
   })) as Sales[];
 
-  const prevTotal = prevData.reduce((acc, curr) => acc + curr.total, 0);
+  const prevTotal = prevData.reduce(
+    (acc, curr) => (curr.complete ? acc + curr.total : acc),
+    0
+  );
 
   const calendars: Calendars[] = [];
   let MonthTotal = 0;
@@ -52,7 +55,10 @@ export async function GET(req: NextRequest) {
     const dateSales = data.filter(
       (payment) => dayjs(payment.date).format("YYYY-MM-DD") === format
     );
-    const total = dateSales.reduce((acc, curr) => acc + curr.total, 0);
+    const total = dateSales.reduce(
+      (acc, curr) => (curr.complete ? acc + curr.total : acc),
+      0
+    );
     if ((i < 7 && date.date() > 20) || (i > 20 && date.date() < 10)) {
       calendars.push({
         date: date.date(),

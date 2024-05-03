@@ -22,10 +22,10 @@ export async function GET(request: NextRequest) {
     ...doc.data(),
   })) as Sales[];
 
-  const dateTotal = data.reduce((prev, curr) => prev + curr.total, 0);
-
+  const complete = data.filter((el) => el.complete);
+  const dateTotal = complete.reduce((prev, curr) => prev + curr.total, 0);
   return Response.json({
     success: true,
-    data: { sales: data, total: dateTotal, count: data.length },
+    data: { sales: complete, total: dateTotal, count: complete.length },
   });
 }
