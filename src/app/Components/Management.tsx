@@ -78,6 +78,9 @@ export default function Management({ storeCode }: Props) {
             tag="tbody"
             animation={200}
             list={foodsData}
+            setList={() => {
+              return null;
+            }}
             onEnd={async (e: SortableEvent) => {
               const list = [...foodsData];
               const obj = list.splice(e.oldIndex as number, 1);
