@@ -2,13 +2,7 @@
 import { Login, User } from "@/types/service";
 import { NextRequest } from "next/server";
 import crypto from "crypto";
-import {
-  QueryDocumentSnapshot,
-  collection,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import db from "@/app/service/firebase";
 
 export async function POST(request: NextRequest) {
@@ -17,25 +11,30 @@ export async function POST(request: NextRequest) {
   const encryption = crypto.createHash("sha256").update(password).digest("hex");
 
   const getUser = await getDocs(
-    query(
-      collection(db, "users"),
-      where("userId", "==", id),
-      where("userPassword", "==", encryption)
-    )
+    query(collection(db, "users"), where("userId", "==", id))
   );
   if (getUser.empty) {
     return Response.json(
       {
         success: false,
-        error: { message: "아이디 또는 비밀번호가 일치하지 않습니다" },
+        error: { message: "일치하는 아이디가 없습니다" },
       },
-      { status: 500 }
+      { status: 401 }
     );
   }
-
-  const user = getUser.docs.map((el: QueryDocumentSnapshot) => {
+  const users = getUser.docs.map((el) => {
     return { id: el.id, ...el.data() };
-  })[0] as User;
+  }) as User[];
+  const user = users.find((el) => el.userPassword === encryption);
+  if (!user) {
+    return Response.json(
+      {
+        success: false,
+        error: { message: "비밀번호가 일치하지 않습니다" },
+      },
+      { status: 401 }
+    );
+  }
   const { userPassword, ...userData } = user;
 
   const encoded = Buffer.from(JSON.stringify(userData), "utf-8").toString(

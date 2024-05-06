@@ -41,7 +41,7 @@ const onResponse = (response: AxiosResponse) => {
 
 const onError = (error: CustomAxiosError) => {
   if (error.response && error.response.status === HttpStatusCode.Unauthorized) {
-    alert("세션이 만료되었습니다.");
+    alert(error.response?.data?.error?.message);
     return;
   }
 
