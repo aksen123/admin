@@ -13,10 +13,6 @@ export async function POST(request: NextRequest) {
   const getUser = await getDocs(
     query(collection(db, "users"), where("userId", "==", id))
   );
-  const users = getUser.docs.map((el) => {
-    return { id: el.id, ...el.data() };
-  }) as User[];
-  const user = users.find((el) => el.userPassword === encryption);
   if (getUser.empty) {
     return Response.json(
       {
@@ -26,6 +22,10 @@ export async function POST(request: NextRequest) {
       { status: 401 }
     );
   }
+  const users = getUser.docs.map((el) => {
+    return { id: el.id, ...el.data() };
+  }) as User[];
+  const user = users.find((el) => el.userPassword === encryption);
   if (!user) {
     return Response.json(
       {
