@@ -10,7 +10,7 @@ import dayjs from "dayjs";
 export default function Admin({ store }: { store: string }) {
   const [view, setView] = useState<string>("wait");
   const [date, setDate] = useState<string>(dayjs().format("YYYY-MM-DD"));
-  const { data, isLoading, mutate } = useSWR(
+  const { data, isLoading } = useSWR(
     store ? `/api/order/date/${date}` : null,
     () => getOrder.getStore(store, date)
   );
@@ -85,16 +85,16 @@ export default function Admin({ store }: { store: string }) {
           </button>
         </div>
         {view === ViewBoard.wait ? (
-          <Card sales={data?.wait} view={view} mutate={mutate} date={date} />
+          <Card sales={data?.wait} view={view}  date={date} />
         ) : null}
         {view === ViewBoard.receipt ? (
-          <Card sales={data?.receipt} view={view} mutate={mutate} date={date} />
+          <Card sales={data?.receipt} view={view}  date={date} />
         ) : null}
         {view === ViewBoard.complete ? (
           <Card
             sales={data?.complete}
             view={view}
-            mutate={mutate}
+            
             date={date}
           />
         ) : null}

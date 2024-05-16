@@ -1,7 +1,9 @@
-import ReactApexChart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
+import dynamic from "next/dynamic";
 
 export default function Chart({ storeCode }: { storeCode: string }) {
+  const ApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
+
   const options: ApexOptions = {
     theme: {
       mode: "light",
@@ -19,7 +21,8 @@ export default function Chart({ storeCode }: { storeCode: string }) {
   ];
   return (
     <div className="w-full p-8 bg-white rounded-b-2xl min-h-screen h-fit">
-      <ReactApexChart options={options} series={series} />
+      <span>{storeCode} 점</span>
+      <ApexChart options={options} series={series} />
     </div>
   );
 }

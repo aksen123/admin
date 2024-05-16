@@ -1,22 +1,21 @@
 import { getOrder } from "@/app/service/order";
 import { ViewBoard } from "@/types/enum";
-import { BoardStatus, Sales } from "@/types/service";
+import { Sales } from "@/types/service";
 import dayjs from "dayjs";
 import React from "react";
-import { KeyedMutator, mutate } from "swr";
+import { mutate } from "swr";
 
 interface CardProps {
   sales: Sales[];
   view: string;
-  mutate : KeyedMutator<BoardStatus>
-  date : string
+  date: string;
 }
 
-export default function Card({ sales, view,date }: CardProps) {
+export default function Card({ sales, view, date }: CardProps) {
   const onClick = async (id: string) => {
     const data = { id, view };
     await getOrder.post(data);
-    mutate(`/api/order/date/${date}`)
+    mutate(`/api/order/date/${date}`);
   };
   return (
     <div className="w-full grid grid-cols-4 justify-center items-start gap-x-8 gap-y-8 p-8 bg-white rounded-b-2xl min-h-screen h-fit">
