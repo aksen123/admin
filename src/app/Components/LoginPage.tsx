@@ -41,7 +41,13 @@ export default function LoginPage() {
         </div>
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
           <input
-            {...register("id", { required: "아이디를 입력해 주세요." })}
+            {...register("id", {
+              required: "아이디를 입력해 주세요.",
+              pattern: {
+                value: /^[a-zA-Z0-9]+$/,
+                message: "영문,숫자만 입력 가능합니다",
+              },
+            })}
             type="text"
             placeholder="아이디"
             className="border-[1px] border-gray-400 outline-2 hover:border-blue-300 focus:outline-blue-400 rounded-xl p-2 px-3 font-thin text-base placeholder:text-base"
@@ -56,7 +62,7 @@ export default function LoginPage() {
           <p className="text-red-600">{errors.password?.message}</p>
           <button
             type="submit"
-            className="bg-blue-600 hover:bg-blue-500 text-white text-center text-lg font-medium rounded-xl p-2 mt-2"
+            className="bg-blue-600 hover:bg-blue-500 active:bg-blue-500 text-white text-center text-lg font-medium rounded-xl p-2 mt-2"
           >
             로그인
           </button>

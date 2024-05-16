@@ -82,7 +82,7 @@ const Calendar = ({ storeCode }: Props) => {
     };
     getSales();
     getDetail(pickDate);
-  }, [date]);
+  }, [date, storeCode]);
 
   return (
     <div className="flex space-x-4">
