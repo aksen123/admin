@@ -2,7 +2,6 @@ import ReactApexChart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
 
 export default function Chart({ storeCode }: { storeCode: string }) {
-  console.log(storeCode);
   const options: ApexOptions = {
     theme: {
       mode: "light",

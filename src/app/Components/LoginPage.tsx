@@ -4,9 +4,9 @@ import { Login } from "@/types/service";
 import { useForm } from "react-hook-form";
 import { GiDumplingBao } from "react-icons/gi";
 import { loginApi } from "../service/login";
-import { getCookie, setCookie } from "cookies-next";
+import { CookieValueTypes, getCookie, setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function LoginPage() {
   const { replace } = useRouter();
@@ -18,7 +18,7 @@ export default function LoginPage() {
     mode: "onSubmit",
     defaultValues: { id: "test1", password: "0000" },
   });
-
+  const [token, setToken] = useState<CookieValueTypes | null>(null);
   const onSubmit = async (form: Login) => {
     const token = await loginApi.login(form);
     if (token) {
@@ -29,10 +29,11 @@ export default function LoginPage() {
 
   useEffect(() => {
     const token = getCookie("TOKEN");
+    setToken(token);
     token && replace("/dashboard");
-  }, []);
+  });
 
-  return (
+  return token ? null : (
     <div className="w-full h-screen flex justify-center items-center translate-x-[100px]">
       <div className="w-80">
         <div className="flex items-center justify-center gap-1 text-3xl font-semibold text-blue-700 mb-9">
