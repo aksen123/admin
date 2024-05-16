@@ -35,6 +35,7 @@ const RAW_RUNTIME_STATE =
           ["@typescript-eslint/eslint-plugin-tslint", "virtual:fb8ca4f71c98a47d88cb785f68eba2be86ca8fcf75d7db8bd8a1d3c2ec7a37916f5d17511a7ddd4984eb723004cc2dad0d87343153957c0bc39e23f1924764f9#npm:5.62.0"],\
           ["@typescript-eslint/parser", "virtual:fb8ca4f71c98a47d88cb785f68eba2be86ca8fcf75d7db8bd8a1d3c2ec7a37916f5d17511a7ddd4984eb723004cc2dad0d87343153957c0bc39e23f1924764f9#npm:5.62.0"],\
           ["@yarnpkg/sdks", "npm:3.1.0"],\
+          ["apexcharts", "npm:3.49.1"],\
           ["autoprefixer", "virtual:fb8ca4f71c98a47d88cb785f68eba2be86ca8fcf75d7db8bd8a1d3c2ec7a37916f5d17511a7ddd4984eb723004cc2dad0d87343153957c0bc39e23f1924764f9#npm:10.4.17"],\
           ["axios", "npm:1.6.7"],\
           ["babel-eslint", "virtual:fb8ca4f71c98a47d88cb785f68eba2be86ca8fcf75d7db8bd8a1d3c2ec7a37916f5d17511a7ddd4984eb723004cc2dad0d87343153957c0bc39e23f1924764f9#npm:10.1.0"],\
@@ -55,6 +56,7 @@ const RAW_RUNTIME_STATE =
           ["next", "virtual:fb8ca4f71c98a47d88cb785f68eba2be86ca8fcf75d7db8bd8a1d3c2ec7a37916f5d17511a7ddd4984eb723004cc2dad0d87343153957c0bc39e23f1924764f9#npm:14.1.0"],\
           ["postcss", "npm:8.4.35"],\
           ["react", "npm:18.2.0"],\
+          ["react-apexcharts", "virtual:fb8ca4f71c98a47d88cb785f68eba2be86ca8fcf75d7db8bd8a1d3c2ec7a37916f5d17511a7ddd4984eb723004cc2dad0d87343153957c0bc39e23f1924764f9#npm:1.4.1"],\
           ["react-dom", "virtual:fb8ca4f71c98a47d88cb785f68eba2be86ca8fcf75d7db8bd8a1d3c2ec7a37916f5d17511a7ddd4984eb723004cc2dad0d87343153957c0bc39e23f1924764f9#npm:18.2.0"],\
           ["react-hook-form", "virtual:fb8ca4f71c98a47d88cb785f68eba2be86ca8fcf75d7db8bd8a1d3c2ec7a37916f5d17511a7ddd4984eb723004cc2dad0d87343153957c0bc39e23f1924764f9#npm:7.50.1"],\
           ["react-icon", "virtual:fb8ca4f71c98a47d88cb785f68eba2be86ca8fcf75d7db8bd8a1d3c2ec7a37916f5d17511a7ddd4984eb723004cc2dad0d87343153957c0bc39e23f1924764f9#npm:1.0.0"],\
@@ -2389,6 +2391,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@yr/monotone-cubic-spline", [\
+      ["npm:1.0.3", {\
+        "packageLocation": "../../AppData/Local/Yarn/Berry/cache/@yr-monotone-cubic-spline-npm-1.0.3-a6469f7958-10c0.zip/node_modules/@yr/monotone-cubic-spline/",\
+        "packageDependencies": [\
+          ["@yr/monotone-cubic-spline", "npm:1.0.3"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["abbrev", [\
       ["npm:2.0.0", {\
         "packageLocation": "../../AppData/Local/Yarn/Berry/cache/abbrev-npm-2.0.0-0eb38a17e5-10c0.zip/node_modules/abbrev/",\
@@ -2520,6 +2531,22 @@ const RAW_RUNTIME_STATE =
           ["anymatch", "npm:3.1.3"],\
           ["normalize-path", "npm:3.0.0"],\
           ["picomatch", "npm:2.3.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["apexcharts", [\
+      ["npm:3.49.1", {\
+        "packageLocation": "../../AppData/Local/Yarn/Berry/cache/apexcharts-npm-3.49.1-9738d44035-10c0.zip/node_modules/apexcharts/",\
+        "packageDependencies": [\
+          ["apexcharts", "npm:3.49.1"],\
+          ["@yr/monotone-cubic-spline", "npm:1.0.3"],\
+          ["svg.draggable.js", "npm:2.2.2"],\
+          ["svg.easing.js", "npm:2.0.0"],\
+          ["svg.filter.js", "npm:2.0.2"],\
+          ["svg.pathmorphing.js", "npm:0.1.3"],\
+          ["svg.resize.js", "npm:1.4.3"],\
+          ["svg.select.js", "npm:3.0.1"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -3458,6 +3485,7 @@ const RAW_RUNTIME_STATE =
           ["@typescript-eslint/eslint-plugin-tslint", "virtual:fb8ca4f71c98a47d88cb785f68eba2be86ca8fcf75d7db8bd8a1d3c2ec7a37916f5d17511a7ddd4984eb723004cc2dad0d87343153957c0bc39e23f1924764f9#npm:5.62.0"],\
           ["@typescript-eslint/parser", "virtual:fb8ca4f71c98a47d88cb785f68eba2be86ca8fcf75d7db8bd8a1d3c2ec7a37916f5d17511a7ddd4984eb723004cc2dad0d87343153957c0bc39e23f1924764f9#npm:5.62.0"],\
           ["@yarnpkg/sdks", "npm:3.1.0"],\
+          ["apexcharts", "npm:3.49.1"],\
           ["autoprefixer", "virtual:fb8ca4f71c98a47d88cb785f68eba2be86ca8fcf75d7db8bd8a1d3c2ec7a37916f5d17511a7ddd4984eb723004cc2dad0d87343153957c0bc39e23f1924764f9#npm:10.4.17"],\
           ["axios", "npm:1.6.7"],\
           ["babel-eslint", "virtual:fb8ca4f71c98a47d88cb785f68eba2be86ca8fcf75d7db8bd8a1d3c2ec7a37916f5d17511a7ddd4984eb723004cc2dad0d87343153957c0bc39e23f1924764f9#npm:10.1.0"],\
@@ -3478,6 +3506,7 @@ const RAW_RUNTIME_STATE =
           ["next", "virtual:fb8ca4f71c98a47d88cb785f68eba2be86ca8fcf75d7db8bd8a1d3c2ec7a37916f5d17511a7ddd4984eb723004cc2dad0d87343153957c0bc39e23f1924764f9#npm:14.1.0"],\
           ["postcss", "npm:8.4.35"],\
           ["react", "npm:18.2.0"],\
+          ["react-apexcharts", "virtual:fb8ca4f71c98a47d88cb785f68eba2be86ca8fcf75d7db8bd8a1d3c2ec7a37916f5d17511a7ddd4984eb723004cc2dad0d87343153957c0bc39e23f1924764f9#npm:1.4.1"],\
           ["react-dom", "virtual:fb8ca4f71c98a47d88cb785f68eba2be86ca8fcf75d7db8bd8a1d3c2ec7a37916f5d17511a7ddd4984eb723004cc2dad0d87343153957c0bc39e23f1924764f9#npm:18.2.0"],\
           ["react-hook-form", "virtual:fb8ca4f71c98a47d88cb785f68eba2be86ca8fcf75d7db8bd8a1d3c2ec7a37916f5d17511a7ddd4984eb723004cc2dad0d87343153957c0bc39e23f1924764f9#npm:7.50.1"],\
           ["react-icon", "virtual:fb8ca4f71c98a47d88cb785f68eba2be86ca8fcf75d7db8bd8a1d3c2ec7a37916f5d17511a7ddd4984eb723004cc2dad0d87343153957c0bc39e23f1924764f9#npm:1.0.0"],\
@@ -6669,6 +6698,33 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["react-apexcharts", [\
+      ["npm:1.4.1", {\
+        "packageLocation": "../../AppData/Local/Yarn/Berry/cache/react-apexcharts-npm-1.4.1-2dc909d883-10c0.zip/node_modules/react-apexcharts/",\
+        "packageDependencies": [\
+          ["react-apexcharts", "npm:1.4.1"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:fb8ca4f71c98a47d88cb785f68eba2be86ca8fcf75d7db8bd8a1d3c2ec7a37916f5d17511a7ddd4984eb723004cc2dad0d87343153957c0bc39e23f1924764f9#npm:1.4.1", {\
+        "packageLocation": "./.yarn/__virtual__/react-apexcharts-virtual-a79a1c6d48/3/AppData/Local/Yarn/Berry/cache/react-apexcharts-npm-1.4.1-2dc909d883-10c0.zip/node_modules/react-apexcharts/",\
+        "packageDependencies": [\
+          ["react-apexcharts", "virtual:fb8ca4f71c98a47d88cb785f68eba2be86ca8fcf75d7db8bd8a1d3c2ec7a37916f5d17511a7ddd4984eb723004cc2dad0d87343153957c0bc39e23f1924764f9#npm:1.4.1"],\
+          ["@types/apexcharts", null],\
+          ["@types/react", "npm:18.2.55"],\
+          ["apexcharts", "npm:3.49.1"],\
+          ["prop-types", "npm:15.8.1"],\
+          ["react", "npm:18.2.0"]\
+        ],\
+        "packagePeers": [\
+          "@types/apexcharts",\
+          "@types/react",\
+          "apexcharts",\
+          "react"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["react-dom", [\
       ["npm:18.2.0", {\
         "packageLocation": "../../AppData/Local/Yarn/Berry/cache/react-dom-npm-18.2.0-dd675bca1c-10c0.zip/node_modules/react-dom/",\
@@ -7456,6 +7512,84 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../AppData/Local/Yarn/Berry/cache/supports-preserve-symlinks-flag-npm-1.0.0-f17c4d0028-10c0.zip/node_modules/supports-preserve-symlinks-flag/",\
         "packageDependencies": [\
           ["supports-preserve-symlinks-flag", "npm:1.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["svg.draggable.js", [\
+      ["npm:2.2.2", {\
+        "packageLocation": "../../AppData/Local/Yarn/Berry/cache/svg.draggable.js-npm-2.2.2-91cd7475f3-10c0.zip/node_modules/svg.draggable.js/",\
+        "packageDependencies": [\
+          ["svg.draggable.js", "npm:2.2.2"],\
+          ["svg.js", "npm:2.7.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["svg.easing.js", [\
+      ["npm:2.0.0", {\
+        "packageLocation": "../../AppData/Local/Yarn/Berry/cache/svg.easing.js-npm-2.0.0-0c84ce8158-10c0.zip/node_modules/svg.easing.js/",\
+        "packageDependencies": [\
+          ["svg.easing.js", "npm:2.0.0"],\
+          ["svg.js", "npm:2.7.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["svg.filter.js", [\
+      ["npm:2.0.2", {\
+        "packageLocation": "../../AppData/Local/Yarn/Berry/cache/svg.filter.js-npm-2.0.2-f65ff6d47e-10c0.zip/node_modules/svg.filter.js/",\
+        "packageDependencies": [\
+          ["svg.filter.js", "npm:2.0.2"],\
+          ["svg.js", "npm:2.7.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["svg.js", [\
+      ["npm:2.7.1", {\
+        "packageLocation": "../../AppData/Local/Yarn/Berry/cache/svg.js-npm-2.7.1-c232ccf7aa-10c0.zip/node_modules/svg.js/",\
+        "packageDependencies": [\
+          ["svg.js", "npm:2.7.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["svg.pathmorphing.js", [\
+      ["npm:0.1.3", {\
+        "packageLocation": "../../AppData/Local/Yarn/Berry/cache/svg.pathmorphing.js-npm-0.1.3-83b910d5a4-10c0.zip/node_modules/svg.pathmorphing.js/",\
+        "packageDependencies": [\
+          ["svg.pathmorphing.js", "npm:0.1.3"],\
+          ["svg.js", "npm:2.7.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["svg.resize.js", [\
+      ["npm:1.4.3", {\
+        "packageLocation": "../../AppData/Local/Yarn/Berry/cache/svg.resize.js-npm-1.4.3-9e6b42a70f-10c0.zip/node_modules/svg.resize.js/",\
+        "packageDependencies": [\
+          ["svg.resize.js", "npm:1.4.3"],\
+          ["svg.js", "npm:2.7.1"],\
+          ["svg.select.js", "npm:2.1.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["svg.select.js", [\
+      ["npm:2.1.2", {\
+        "packageLocation": "../../AppData/Local/Yarn/Berry/cache/svg.select.js-npm-2.1.2-d8be268fcb-10c0.zip/node_modules/svg.select.js/",\
+        "packageDependencies": [\
+          ["svg.select.js", "npm:2.1.2"],\
+          ["svg.js", "npm:2.7.1"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:3.0.1", {\
+        "packageLocation": "../../AppData/Local/Yarn/Berry/cache/svg.select.js-npm-3.0.1-9baa0ca5b5-10c0.zip/node_modules/svg.select.js/",\
+        "packageDependencies": [\
+          ["svg.select.js", "npm:3.0.1"],\
+          ["svg.js", "npm:2.7.1"]\
         ],\
         "linkType": "HARD"\
       }]\

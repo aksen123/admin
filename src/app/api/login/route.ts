@@ -22,10 +22,12 @@ export async function POST(request: NextRequest) {
       { status: 401 }
     );
   }
+
   const users = getUser.docs.map((el) => {
     return { id: el.id, ...el.data() };
   }) as User[];
   const user = users.find((el) => el.userPassword === encryption);
+
   if (!user) {
     return Response.json(
       {
