@@ -31,7 +31,7 @@ export default function LoginPage() {
     const token = getCookie("TOKEN");
     setToken(token);
     token && replace("/dashboard");
-  });
+  }, []);
 
   return token ? null : (
     <div className="w-full h-screen flex justify-center items-center translate-x-[100px]">

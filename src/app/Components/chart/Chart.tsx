@@ -8,14 +8,14 @@ export default function Chart({ storeCode }: { storeCode: string }) {
     },
     chart: {
       type: "line",
-      height: 250,
+      height: 100,
     },
     xaxis: {
       categories: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
     },
   };
   const series = [
-    { name: "test", data: [100, 200, 300, 400, 500, 100, 500, 200, 700, 1000] },
+    { name: "test", data: [100, 200, 300, 400, 500, 100, 500, 200, 200, 100] },
   ];
   return (
     <div className="w-full p-8 bg-white rounded-b-2xl min-h-screen h-fit">
