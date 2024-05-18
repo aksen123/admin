@@ -10,6 +10,7 @@ export default function Page() {
     ? EnumAuth.super
     : (user?.store as string);
 
+  // 추가 해야함 >>> EnumAuth.super 일때 들어오면 /dashboard로 보내주기
   return (
     user && (
       <article className="p-8 w-full">
