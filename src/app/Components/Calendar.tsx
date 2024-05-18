@@ -7,7 +7,7 @@ import {
   BiSolidChevronLeftSquare,
   BiSolidChevronRightSquare,
 } from "react-icons/bi";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState, useResetRecoilState, useSetRecoilState } from "recoil";
 import { MonthTotal, calendarState } from "../atoms/calendar-atom";
 import { saleService } from "../service/sales";
 import NoSales from "./animations/NoSales";
@@ -17,6 +17,7 @@ interface Props {
 }
 
 const Calendar = ({ storeCode }: Props) => {
+  const resetRecoil = useResetRecoilState(calendarState);
   const [date, setDate] = useRecoilState(calendarState);
   const setMonthTotal = useSetRecoilState(MonthTotal);
   const [calendarArr, setCalendarArr] = useState<Calendars[]>([]);
@@ -24,7 +25,6 @@ const Calendar = ({ storeCode }: Props) => {
   const [pickDate, setPickDate] = useState<string>(
     dayjs().format("YYYY-MM-DD")
   );
-
   const todayCheck = (date: string): boolean => {
     return pickDate === date;
   };
@@ -60,7 +60,7 @@ const Calendar = ({ storeCode }: Props) => {
   };
 
   useEffect(() => {
-    const current = dayjs(`${date.year}.${date.month}.01`);
+    const current = dayjs(`${date.year}-${date.month}`);
     const monthFirst = current.day();
     const currentLength = current.daysInMonth();
     const blank = 7 - ((currentLength + monthFirst) % 7);
@@ -82,7 +82,13 @@ const Calendar = ({ storeCode }: Props) => {
     };
     getSales();
     getDetail(pickDate);
-  }, [date, storeCode]);
+  }, [date]);
+
+  useEffect(() => {
+    // setDate({ year: dayjs().year(), month: dayjs().month() + 1 });
+    resetRecoil();
+    setPickDate(dayjs().format("YYYY-MM-DD"));
+  }, [storeCode]);
 
   return (
     <div className="flex space-x-4">
