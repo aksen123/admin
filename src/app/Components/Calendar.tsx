@@ -7,7 +7,7 @@ import {
   BiSolidChevronLeftSquare,
   BiSolidChevronRightSquare,
 } from "react-icons/bi";
-import { useRecoilState, useResetRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { MonthTotal, calendarState } from "../atoms/calendar-atom";
 import { saleService } from "../service/sales";
 import NoSales from "./animations/NoSales";
@@ -17,7 +17,6 @@ interface Props {
 }
 
 const Calendar = ({ storeCode }: Props) => {
-  const resetRecoil = useResetRecoilState(calendarState);
   const [date, setDate] = useRecoilState(calendarState);
   const setMonthTotal = useSetRecoilState(MonthTotal);
   const [calendarArr, setCalendarArr] = useState<Calendars[]>([]);
@@ -59,6 +58,15 @@ const Calendar = ({ storeCode }: Props) => {
     setSaleDetail(detail);
   };
 
+  const getSales = async (range: Range) => {
+    const data = await saleService.getSales(range, storeCode);
+    setCalendarArr(data.calendars);
+    setMonthTotal(() => {
+      return {
+        ...data.monthInfo,
+      };
+    });
+  };
   useEffect(() => {
     const current = dayjs(`${date.year}-${date.month}`);
     const monthFirst = current.day();
@@ -71,22 +79,13 @@ const Calendar = ({ storeCode }: Props) => {
         .add(blank === 7 ? 0 : blank, "day")
         .valueOf(),
     };
-    const getSales = async () => {
-      const data = await saleService.getSales(range, storeCode);
-      setCalendarArr(data.calendars);
-      setMonthTotal(() => {
-        return {
-          ...data.monthInfo,
-        };
-      });
-    };
-    getSales();
+
+    getSales(range);
     getDetail(pickDate);
   }, [date]);
 
   useEffect(() => {
-    // setDate({ year: dayjs().year(), month: dayjs().month() + 1 });
-    resetRecoil();
+    setDate({ year: dayjs().year(), month: dayjs().month() + 1 });
     setPickDate(dayjs().format("YYYY-MM-DD"));
   }, [storeCode]);
 
