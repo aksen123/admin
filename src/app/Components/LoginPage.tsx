@@ -4,7 +4,7 @@ import { Login } from "@/types/service";
 import { useForm } from "react-hook-form";
 import { GiDumplingBao } from "react-icons/gi";
 import { loginApi } from "../service/login";
-import { CookieValueTypes, getCookie } from "cookies-next";
+import { CookieValueTypes, getCookie, setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -22,6 +22,7 @@ export default function LoginPage() {
   const onSubmit = async (form: Login) => {
     const token = await loginApi.login(form);
     if (token) {
+      setCookie("TOKEN", token);
       replace("/dashboard");
     }
   };

@@ -4,7 +4,6 @@ import { NextRequest } from "next/server";
 import crypto from "crypto";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import db from "@/app/service/firebase";
-import { setCookie } from "cookies-next";
 
 export async function POST(request: NextRequest) {
   const data = (await request.json()) as Login;
@@ -43,6 +42,5 @@ export async function POST(request: NextRequest) {
   const encoded = Buffer.from(JSON.stringify(userData), "utf-8").toString(
     "base64"
   );
-  setCookie("TOKEN", encoded);
   return Response.json({ success: true, data: encoded });
 }

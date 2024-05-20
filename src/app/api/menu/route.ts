@@ -12,6 +12,7 @@ import { NextRequest } from "next/server";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storeApi } from "@/app/service/store";
 import { EnumAuth } from "@/types/enum";
+import { Food } from "@/types/service";
 
 interface DataType {
   [k: string]: FormDataEntryValue;
@@ -80,9 +81,10 @@ export async function PUT(request: NextRequest) {
   const file = formData.get("file") as File;
   const documentID = formData.get("id");
   const origin = formData.get("origin");
-  const data: DataType = Object.fromEntries(
+  const data = Object.fromEntries(
     Array.from(formData.entries()).filter(
-      (el) => !el.includes("file") && !el.includes("origin")
+      (el) =>
+        !el.includes("file") && !el.includes("origin") && !el.includes("id")
     )
   );
   const check = await checkDuplicate(store as string, data.name as string);
@@ -91,14 +93,13 @@ export async function PUT(request: NextRequest) {
     store === EnumAuth.super ? "default-menu" : "menu",
     documentID as string
   );
-
   const updateData = {
     ...data,
     price: +data.price,
     sort: +data.sort,
     soldOut: data.soldOut === "true",
     hide: data.hide === "true",
-  };
+  } as Food;
   if (!check && data.name !== origin) {
     return Response.json(
       {
@@ -112,15 +113,17 @@ export async function PUT(request: NextRequest) {
     const storageRef = ref(firebaseApp, `menu/${file.name}`);
     const snapshot = await uploadBytes(storageRef, file as File);
     const imgUrl = await getDownloadURL(snapshot.ref);
-    await updateDoc(originMenu, { ...updateData, src: imgUrl });
+    updateData.src = imgUrl;
+    await updateDoc(originMenu, { ...updateData });
   }
-  // 메뉴 이미지 안들어왔을때 메뉴 수정 하는것 안들어가 있음 추가하기!!!!
-  // 이미지 들어왔을때 전체 지점에 이미지 넣는것 안됨 이것도 수정 하기
+  if (typeof file === "string") {
+    await updateDoc(originMenu, { ...updateData });
+  }
   if (store === EnumAuth.super) {
     const stores = await storeApi.list();
     stores.map((el) => {
       const store = doc(db, "menu", `${el.code}_${documentID}`);
-      updateDoc(store, updateData);
+      updateDoc(store, { ...updateData });
     });
   }
   return Response.json({ success: true });
