@@ -4,6 +4,7 @@ import { NextRequest } from "next/server";
 import crypto from "crypto";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import db from "@/app/service/firebase";
+import { setCookie } from "cookies-next";
 
 export async function POST(request: NextRequest) {
   const data = (await request.json()) as Login;
@@ -19,7 +20,7 @@ export async function POST(request: NextRequest) {
         success: false,
         error: { message: "일치하는 아이디가 없습니다" },
       },
-      { status: 401 }
+      { status: 404 }
     );
   }
 
@@ -34,7 +35,7 @@ export async function POST(request: NextRequest) {
         success: false,
         error: { message: "비밀번호가 일치하지 않습니다" },
       },
-      { status: 401 }
+      { status: 400 }
     );
   }
   const { userPassword, ...userData } = user;
@@ -42,5 +43,6 @@ export async function POST(request: NextRequest) {
   const encoded = Buffer.from(JSON.stringify(userData), "utf-8").toString(
     "base64"
   );
+  setCookie("TOKEN", encoded);
   return Response.json({ success: true, data: encoded });
 }

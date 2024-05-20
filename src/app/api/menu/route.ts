@@ -114,7 +114,8 @@ export async function PUT(request: NextRequest) {
     const imgUrl = await getDownloadURL(snapshot.ref);
     await updateDoc(originMenu, { ...updateData, src: imgUrl });
   }
-
+  // 메뉴 이미지 안들어왔을때 메뉴 수정 하는것 안들어가 있음 추가하기!!!!
+  // 이미지 들어왔을때 전체 지점에 이미지 넣는것 안됨 이것도 수정 하기
   if (store === EnumAuth.super) {
     const stores = await storeApi.list();
     stores.map((el) => {

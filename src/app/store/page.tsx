@@ -16,6 +16,9 @@ export default function page() {
   const store = searchParams.get("name");
   const code = searchParams.get("code");
   const [viewSwitch, SetViewSwitch] = useState<ViewType>(ViewType.calendar);
+
+  // 전체 관리 권한만 화면 보이게 / 다른 권한이면 대시보드로 보내주기
+
   return (
     code && (
       <article className="p-8 w-full">
