@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
         success: false,
         error: { message: "비밀번호가 일치하지 않습니다" },
       },
-      { status: 400 }
+      { status: 401 }
     );
   }
   const { userPassword, ...userData } = user;
