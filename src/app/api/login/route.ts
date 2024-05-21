@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
         success: false,
         error: { message: "일치하는 아이디가 없습니다" },
       },
-      { status: 401 }
+      { status: 404 }
     );
   }
 

@@ -40,7 +40,11 @@ const onResponse = (response: AxiosResponse) => {
 };
 
 const onError = (error: CustomAxiosError) => {
-  if (error.response && error.response.status === HttpStatusCode.Unauthorized) {
+  if (error.response && error.response.status === HttpStatusCode.NotFound) {
+    alert(error.response?.data?.error?.message);
+    return;
+  }
+  if (error.response && error.response.status === HttpStatusCode.BadRequest) {
     alert(error.response?.data?.error?.message);
     return;
   }

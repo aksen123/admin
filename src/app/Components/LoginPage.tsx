@@ -29,7 +29,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     const token = getCookie("TOKEN");
-    setToken(token);
+    token && setToken(token);
     token && replace("/dashboard");
   }, []);
 
