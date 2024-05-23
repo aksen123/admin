@@ -3,7 +3,7 @@ import Modal from "../Modal";
 import { foodsService } from "@/app/service/foods";
 import { useForm } from "react-hook-form";
 import { Food } from "@/types/service";
-import { mutate } from "swr";
+import { KeyedMutator } from "swr";
 import Image from "next/image";
 
 interface PopupType {
@@ -11,6 +11,7 @@ interface PopupType {
   onClose: () => void;
   sort?: number;
   storeCode: string | null;
+  mutate: KeyedMutator<Food[]>;
 }
 
 export default function AddFoodPopup({
@@ -18,6 +19,7 @@ export default function AddFoodPopup({
   onClose,
   sort,
   storeCode,
+  mutate,
 }: PopupType) {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [foodSrc, setFoodSrc] = useState<string | null>(null);
@@ -49,7 +51,7 @@ export default function AddFoodPopup({
       ? await foodsService.update(formData, storeCode)
       : await foodsService.add(formData, storeCode);
     alert(`${formFood.name} 음식이 ${food ? "수정" : "등록"}되었습니다.`);
-    mutate("/api/menu");
+    mutate();
     onClose();
     imageUrl && URL.revokeObjectURL(imageUrl);
   };

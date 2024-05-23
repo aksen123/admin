@@ -14,8 +14,4 @@ declare global {
     yes?: string,
     callback?: () => void
   );
-  declare function errorAlert(
-    message: string | ReactNode,
-    callback?: () => void
-  );
 }
