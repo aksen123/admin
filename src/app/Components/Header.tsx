@@ -34,7 +34,7 @@ export default function Header() {
           className="flex items-center gap-1 text-2xl font-bold text-blue-700"
         >
           <GiDumplingBao size={30} />
-          <span className="">만두 어드민</span>
+          <span className="">만두집 어드민</span>
         </Link>
         <ul className="flex space-x-6">
           <li>

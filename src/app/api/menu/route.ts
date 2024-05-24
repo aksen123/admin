@@ -137,6 +137,7 @@ const setMenu = async (data: DataType, store: string | null, url?: string) => {
     src: url ? url : null,
     soldOut: data.soldOut === "true",
     hide: data.hide === "true",
+    store,
   };
   if (store === EnumAuth.super) {
     const stores = await storeApi.list();

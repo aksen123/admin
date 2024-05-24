@@ -38,7 +38,7 @@ export default function LoginPage() {
       <div className="w-80">
         <div className="flex items-center justify-center gap-1 text-3xl font-semibold text-blue-700 mb-9">
           <GiDumplingBao size={40} />
-          <span className="text-black">만두어드민</span>
+          <span className="text-black">만두집 어드민</span>
         </div>
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
           <input

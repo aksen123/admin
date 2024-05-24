@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { ReactSortable, SortableEvent } from "react-sortablejs";
-import useSWR, { mutate } from "swr";
+import useSWR from "swr";
 import AddFoodPopup from "./modal/popup/AddFoodPopup";
 import { foodsService } from "../service/foods";
 
@@ -14,10 +14,11 @@ interface Props {
 }
 
 export default function Management({ storeCode }: Props) {
-  const { data: foods = [], isLoading } = useSWR(
-    storeCode ? "/api/menu" : null,
-    () => foodsService.get(storeCode)
-  );
+  const {
+    data: foods = [],
+    isLoading,
+    mutate,
+  } = useSWR(storeCode ? "/api/menu" : null, () => foodsService.get(storeCode));
   const [foodsData, setFoodsData] = useState<Food[]>([]);
   const [sortNumber, setSortNumber] = useState(0);
   const [isAddFoodPopup, setIsAddFoodPopup] = useState<boolean>(false);
@@ -31,7 +32,7 @@ export default function Management({ storeCode }: Props) {
     window.yesNo(food.name, "정말로 삭제 하시겠습니까?", "삭제", async () => {
       await foodsService.delete(food.id, storeCode).then(() => {
         alert(`${food.name} 메뉴가 삭제되었습니다.`);
-        mutate("/api/menu");
+        mutate();
       });
     });
   };
@@ -170,6 +171,7 @@ export default function Management({ storeCode }: Props) {
               setIsAddFoodPopup(false);
               setFoodData(null);
             }}
+            mutate={mutate}
           />
         )}
       </div>
