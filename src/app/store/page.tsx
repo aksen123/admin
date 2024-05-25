@@ -2,7 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import SalesPage from "../Components/Sales";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Management from "../Components/Management";
 // import ChartBoard from "../Components/chart/ChartBoard";
 import useUserInfo from "../hooks/useUserInfo";
@@ -19,7 +19,15 @@ export default function page() {
   const code = searchParams.get("code");
   const [viewSwitch, SetViewSwitch] = useState<ViewType>(ViewType.calendar);
   const user = useUserInfo();
-  // 전체 관리 권한만 화면 보이게 / 다른 권한이면 대시보드로 보내주기
+
+  useEffect(() => {
+    SetViewSwitch(ViewType.calendar);
+  }, [store]);
+
+  // 컴포넌트 만들어주기!
+  if (!user?.auth.includes(EnumAuth.super)) {
+    return <div>잘못된 접근입니다</div>;
+  }
 
   return user?.auth.includes(EnumAuth.super) ? (
     <article className="p-8 w-full">
