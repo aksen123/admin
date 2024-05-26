@@ -170,3 +170,16 @@
   - 아이디, 비밀번호가 없거나 틀릴시 각각에 대한 에러메시지를 경고창으로 띄워 줍니다.
   - 아이디 입력란에 한글을 입력하면 입력창 하단에 문구가 경고 문구가 나타납니다.
 
+|아이디가 없을시|비밀번호 틀릴시|한글 입력시|
+|-----|-----|-----|
+|![id](https://github.com/aksen123/admin/assets/126546293/cebb7d0a-338b-460c-9933-edb50d50cfb8)|![pw](https://github.com/aksen123/admin/assets/126546293/d1a63023-8573-4a3c-aea4-452aa940dc36)|![ko](https://github.com/aksen123/admin/assets/126546293/cf49ccf5-c21b-41ea-b1b0-c347e8482447)|
+
+
+### 로그인 후 첫 화면 ( 대시보드 )
+- 권한별 대시보드 화면으로 넘어오게 됩니다.
+  - 전체 관리 : 전체 지점 매출 현황
+  - 일반 관리 : 주문 접수, 확인
+  
+|전체 관리|일반 관리|
+|-----|-----|
+|![all](https://github.com/aksen123/admin/assets/126546293/98f36079-a9e7-42fa-a933-c4d4c5aa0a8a)|![one](https://github.com/aksen123/admin/assets/126546293/b624b5d8-ca7d-43d4-8d5b-150749fa61e6)|
