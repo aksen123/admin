@@ -25,6 +25,7 @@ export interface Sales {
   total: number;
   receipt: boolean;
   complete: boolean;
+  orderType: boolean;
 }
 
 export interface Calendars {
