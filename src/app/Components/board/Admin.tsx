@@ -8,8 +8,9 @@ import Card from "./Card";
 import dayjs from "dayjs";
 
 export default function Admin({ store }: { store: string }) {
-  const [view, setView] = useState<string>("wait");
+  const [view, setView] = useState<string>(ViewBoard.wait);
   const [date, setDate] = useState<string>(dayjs().format("YYYY-MM-DD"));
+  const today = dayjs().format("YYYY-MM-DD") === date;
   const { data, isLoading } = useSWR(
     store ? `/api/order/date/${date}` : null,
     () => getOrder.getStore(store, date)
@@ -38,7 +39,10 @@ export default function Admin({ store }: { store: string }) {
           <h2 className="w-full text-center text-3xl text-blue-600 font-bold mb-5">
             {dayjs(date).format("YYYY년 MM월 DD일")} 매출현황
           </h2>
-          <button className="text-3xl" onClick={() => handleDate(1)}>
+          <button
+            className={`text-3xl ${today && "cursor-text text-gray-400"}`}
+            onClick={() => (today ? null : handleDate(1))}
+          >
             ▶
           </button>
         </div>
@@ -85,18 +89,13 @@ export default function Admin({ store }: { store: string }) {
           </button>
         </div>
         {view === ViewBoard.wait ? (
-          <Card sales={data?.wait} view={view}  date={date} />
+          <Card sales={data?.wait} view={view} date={date} />
         ) : null}
         {view === ViewBoard.receipt ? (
-          <Card sales={data?.receipt} view={view}  date={date} />
+          <Card sales={data?.receipt} view={view} date={date} />
         ) : null}
         {view === ViewBoard.complete ? (
-          <Card
-            sales={data?.complete}
-            view={view}
-            
-            date={date}
-          />
+          <Card sales={data?.complete} view={view} date={date} />
         ) : null}
       </div>
     )
