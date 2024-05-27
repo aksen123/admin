@@ -33,12 +33,22 @@ export async function POST(request: NextRequest) {
     return Response.json(
       {
         success: false,
-        error: { message: "같은 이름의 지점이 있습니다." },
+        error: { message: "같은 이름의 지점명이 있습니다." },
       },
       { status: 500 }
     );
   }
-
+  const usersCollection = await getDocs(collection(db, "users"));
+  const usersID = usersCollection.docs.map((el) => el.get("userId"));
+  if (usersID.find((el) => el === userId)) {
+    return Response.json(
+      {
+        success: false,
+        error: { message: "중복된 아이디가 있습니다." },
+      },
+      { status: 500 }
+    );
+  }
   const menus = (await foodsService.get(EnumAuth.super)).map(
     ({ id, ...rest }) => rest
   );
@@ -72,5 +82,8 @@ export async function POST(request: NextRequest) {
   );
   await setDoc(doc(db, "stores", newCode), storeInfo);
   await addDoc(collection(db, "users"), userInfo);
-  return Response.json({ success: true });
+  return Response.json({
+    success: true,
+    data: `${storeName}점 등록이 완료 되었습니다.`,
+  });
 }

@@ -1,4 +1,5 @@
 interface Window {
+  alert(message: string, callback?: () => void);
   yesNo(
     title: string,
     message: string | ReactNode,
@@ -7,7 +8,7 @@ interface Window {
   );
 }
 declare global {
-  declare function alert(message: string | ReactNode, callback?: () => void);
+  declare function alert(message: string, callback?: () => void);
   declare function yesNo(
     title: string,
     message: string | ReactNode,
