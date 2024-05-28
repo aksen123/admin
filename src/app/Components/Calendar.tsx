@@ -241,8 +241,9 @@ const Calendar = ({ storeCode }: Props) => {
                       );
                     })}
                   </p>
-                  <p className="w-full p-2 text-left">
-                    결제 금액 : {sale.total.toLocaleString()}원
+                  <p className="w-full p-2 flex justify-between">
+                    <span>결제 금액 </span>
+                    <span>{sale.total.toLocaleString()}원</span>
                   </p>
                 </div>
               ))}

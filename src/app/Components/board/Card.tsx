@@ -17,6 +17,7 @@ export default function Card({ sales, view, date }: CardProps) {
     await getOrder.post(data);
     mutate(`/api/order/date/${date}`);
   };
+  // 주문 카드에 (<span>{sale.id}</span>요기) 기존 결제 번호 말고 주문번호(추가 해야함 )로 바꾸기~
   return (
     <div className="w-full grid grid-cols-4 justify-center items-start gap-x-8 gap-y-8 p-8 bg-white rounded-b-2xl min-h-screen h-fit">
       {sales.map((sale) => (
@@ -26,9 +27,13 @@ export default function Card({ sales, view, date }: CardProps) {
         >
           <div className="bg-orange-400 rounded-t-2xl p-2 px-4 font-semibold text-white flex justify-between">
             <span>{sale.id}</span>
-            <span>{dayjs(sale.date).format("HH:mm")}</span>
+            <span>{sale.orderType ? "매장" : "포장"}</span>
           </div>
           <div className="flex-1 border-b-[1px] border-b-gray-400 border-x-2 border-x-orange-400 p-2 px-4">
+            <div className="flex justify-between">
+              <span>결제 시간</span>
+              <span>{dayjs(sale.date).format("HH:mm:ss")}</span>
+            </div>
             {sale.order.map((order, i) => (
               <div key={order.name + i} className="flex justify-between">
                 <span>{order.name}</span>

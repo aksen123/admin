@@ -5,7 +5,7 @@ export const storeApi = {
   list(): Promise<StoreInfo[]> {
     return api.get("/api/store");
   },
-  add(data: AddStore) {
+  add(data: AddStore): Promise<Response> {
     return api.post("/api/store", data);
   },
 };

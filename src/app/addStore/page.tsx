@@ -3,18 +3,20 @@
 import { useForm } from "react-hook-form";
 import { storeApi } from "../service/store";
 import { AddStore } from "@/types/service";
+import { mutate } from "swr";
 
 export default function page() {
   const {
     register,
     handleSubmit,
     setError,
+    reset,
     formState: { errors },
   } = useForm<AddStore>({
     mode: "onChange",
     defaultValues: {},
   });
-  const onSubmit = async (formData: AddStore) => {
+    const onSubmit = async (formData: AddStore) => {
     const koreaRegex = /^[가-힣]+$/;
     let addStore = true;
     if (!koreaRegex.test(formData.name)) {
@@ -42,7 +44,13 @@ export default function page() {
       );
       addStore = false;
     }
-    addStore ? await storeApi.add(formData) : false;
+
+    if (addStore) {
+      const text = await storeApi.add(formData);
+      alert(text);
+      mutate("/api/store");
+      reset();
+    }
   };
   return (
     <article className="w-full h-full p-10">
@@ -65,7 +73,7 @@ export default function page() {
                   message: "17자 이하로 입력 가능합니다.",
                 },
                 pattern: {
-                  value: /^[ㄱ-ㅎㅏ-ㅣ가-힣\s]+$/,
+                  value: /^[가-힣][가-힣]+$/,
                   message: "한글만 입력 가능합니다",
                 },
               })}
@@ -123,11 +131,15 @@ export default function page() {
               {...register("userId", {
                 required: true,
                 pattern: {
-                  value: /^[a-z][a-z0-9]+$/,
-                  message: "아이디의 첫글자는 영문으로 입력해 주세요.",
+                  value: /^[a-z0-9]+$/,
+                  message: "영문,숫자로 입력해 주세요.",
                 },
                 maxLength: {
                   value: 12,
+                  message: "4~12자 이내로 입력해 주세요.",
+                },
+                minLength: {
+                  value: 4,
                   message: "4~12자 이내로 입력해 주세요.",
                 },
               })}
