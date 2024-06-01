@@ -16,7 +16,7 @@ export default function LoginPage() {
     formState: { errors },
   } = useForm<Login>({
     mode: "onSubmit",
-    defaultValues: { id: "test1", password: "0000" },
+    defaultValues: { id: "test", password: "0000" },
   });
   const [token, setToken] = useState<CookieValueTypes | null>(null);
   const onSubmit = async (form: Login) => {
