@@ -207,7 +207,7 @@
 
 |메뉴 추가|
 |:-----:|
-|![add](https://github.com/aksen123/admin/assets/126546293/a217502e-1946-4783-875b-295168281ab1)|
+|![addmenu](https://github.com/aksen123/admin/assets/126546293/db0c137e-b440-486a-a83c-39da8216dd0f)|
 |메뉴 위치 수정|
 |![correction](https://github.com/aksen123/admin/assets/126546293/569c95e4-974e-443a-9444-f5977b0ce2f5)|
 |품절, 활성화|
