@@ -4,6 +4,12 @@ import { NextRequest } from "next/server";
 import crypto from "crypto";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import db from "@/app/service/firebase";
+import { EnumAuth } from "@/types/enum";
+
+interface UserData {
+  id: string;
+  auth: string[];
+}
 
 export async function POST(request: NextRequest) {
   const data = (await request.json()) as Login;
@@ -43,4 +49,15 @@ export async function POST(request: NextRequest) {
     "base64"
   );
   return Response.json({ success: true, data: encoded });
+}
+
+export async function GET() {
+  const getUsers = await getDocs(collection(db, "users"));
+  const getData: UserData[] = getUsers.docs.map((el) => {
+    return { id: el.get("userId"), auth: el.get("auth") };
+  });
+  const data = getData.map((el) => {
+    return { ...el, auth: el.auth.includes(EnumAuth.super) ? "전체" : "일반" };
+  });
+  return Response.json({ success: true, data });
 }
