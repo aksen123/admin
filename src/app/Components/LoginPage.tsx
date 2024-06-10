@@ -11,7 +11,7 @@ import useSWR from "swr";
 
 export default function LoginPage() {
   const { replace } = useRouter();
-  const [view, setView] = useState(true);
+  const [view, setView] = useState(false);
 
   const { data } = useSWR("/api/login", () => loginApi.getId());
   const {
